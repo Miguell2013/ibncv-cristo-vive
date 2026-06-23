@@ -11,20 +11,17 @@ export default function TabsLayout() {
         headerShown: false,
         tabBarActiveTintColor: colors.gold,
         tabBarInactiveTintColor: colors.textFaint,
-        tabBarShowLabel: true,
-        tabBarLabelPosition: 'below-icon',
         tabBarStyle: {
           backgroundColor: colors.bgDeep,
           borderTopColor: colors.border,
           borderTopWidth: 1,
-          height: 58 + insets.bottom,
-          paddingBottom: insets.bottom + 6,
-          paddingTop: 6,
+          height: 64 + insets.bottom,
+          paddingBottom: insets.bottom + 8,
+          paddingTop: 8,
         },
         tabBarLabelStyle: {
           fontFamily: fonts.bodyMedium,
           fontSize: 11,
-          lineHeight: 14,
         },
       }}
     >
