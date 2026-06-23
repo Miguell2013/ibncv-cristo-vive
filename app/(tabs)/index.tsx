@@ -49,7 +49,7 @@ export default function Home() {
       contentContainerStyle={{ paddingBottom: spacing.xxl }}
       showsVerticalScrollIndicator={false}
     >
-      <View style={[styles.body, { maxWidth: maxW, paddingTop: insets.top + spacing.md }]}>
+      <View style={[styles.body, { maxWidth: maxW, paddingTop: insets.top + spacing.xs }]}>
         {/* TOPO: logo grande ao lado do nome + sino */}
         <View style={styles.header}>
           <Image source={{ uri: img.logo }} style={styles.logo} resizeMode="contain" />
@@ -167,12 +167,12 @@ const styles = StyleSheet.create({
   body: { alignSelf: 'center', width: '100%', paddingHorizontal: spacing.md },
 
   header: { alignItems: 'center', justifyContent: 'center', position: 'relative' },
-  logo: { width: 215, height: 108, marginTop: -8, marginBottom: -18 },
+  logo: { width: 215, height: 108, marginTop: -14, marginBottom: -22 },
   bell: { position: 'absolute', right: 0, top: 14 },
   kicker: { fontFamily: fonts.bodySemi, color: colors.goldSoft, fontSize: 12, letterSpacing: 3, textAlign: 'center' },
   brand: { fontFamily: fonts.display, color: colors.text, fontSize: 27, letterSpacing: 4, textAlign: 'center', marginTop: 0 },
 
-  greetRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, marginTop: spacing.lg },
+  greetRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, marginTop: spacing.sm },
   avatarWrap: { width: 60, height: 60, borderRadius: 30, borderWidth: 2, borderColor: colors.gold, backgroundColor: colors.surface, overflow: 'hidden', ...shadow.glow },
   avatarImg: { width: '100%', height: '100%' },
   greetHi: { fontFamily: fonts.displaySemi, color: colors.gold, fontSize: 20 },
