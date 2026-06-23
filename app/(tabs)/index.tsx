@@ -66,7 +66,7 @@ export default function Home() {
         {/* SAUDAÇÃO + ORANDO */}
         <View style={styles.greetWrap}>
           <View style={styles.greetRow}>
-            <Pressable style={styles.avatarWrap} onPress={() => router.push('/entrar' as any)}>
+            <Pressable style={styles.avatarWrap} onPress={() => router.push((identificado ? '/perfil' : '/entrar') as any)}>
               <Image source={{ uri: img.pastor }} style={styles.avatarImg} resizeMode="cover" />
             </Pressable>
             <View style={{ flex: 1 }}>

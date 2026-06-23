@@ -25,7 +25,7 @@ export default function Mais() {
   const router = useRouter();
   const { width } = useWindowDimensions();
   const maxW = Math.min(width, 640);
-  const { identificado, identidade, sair } = useIdentity();
+  const { identificado, identidade } = useIdentity();
 
   return (
     <ScrollView
@@ -43,22 +43,19 @@ export default function Mais() {
         </View>
 
         {identificado ? (
-          <View style={styles.contaCard}>
+          <Pressable
+            style={({ pressed }) => [styles.contaCard, pressed && styles.pressed]}
+            onPress={() => router.push('/perfil' as any)}
+          >
             <View style={styles.contaIcon}>
               <Ionicons name="person" size={20} color={colors.gold} />
             </View>
             <View style={{ flex: 1 }}>
               <Text style={styles.contaNome} numberOfLines={1}>{identidade?.nome}</Text>
-              <Text style={styles.contaEmail} numberOfLines={1}>{identidade?.whatsapp}</Text>
+              <Text style={styles.contaEmail} numberOfLines={1}>Ver meu perfil</Text>
             </View>
-            <Pressable
-              style={({ pressed }) => [styles.sairBtn, pressed && styles.pressed]}
-              onPress={() => sair()}
-            >
-              <Ionicons name="log-out-outline" size={16} color={colors.danger} />
-              <Text style={styles.sairText}>Sair</Text>
-            </Pressable>
-          </View>
+            <Ionicons name="chevron-forward" size={20} color={colors.gold} />
+          </Pressable>
         ) : (
           <Pressable
             style={({ pressed }) => [styles.entrarCard, pressed && styles.pressed]}

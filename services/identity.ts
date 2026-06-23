@@ -8,6 +8,12 @@ export type Identidade = {
   nome: string;
   whatsapp: string;
   email?: string | null;
+  nascimento?: string | null; // ISO AAAA-MM-DD
+  rua?: string | null;
+  numero?: string | null;
+  bairro?: string | null;
+  cidade?: string | null;
+  endereco?: string | null;
 };
 
 export type DadosCadastro = {
@@ -27,6 +33,13 @@ function isoData(s?: string): string | null {
   const m = s.trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
   if (!m) return null;
   return `${m[3]}-${m[2].padStart(2, '0')}-${m[1].padStart(2, '0')}`;
+}
+
+// "AAAA-MM-DD" -> "DD/MM/AAAA" (pra exibir/editar)
+export function brData(iso?: string | null): string {
+  if (!iso) return '';
+  const m = iso.match(/^(\d{4})-(\d{2})-(\d{2})/);
+  return m ? `${m[3]}/${m[2]}/${m[1]}` : '';
 }
 
 // UUID v4 simples (suficiente pra identificar a pessoa sem depender de libs)
@@ -85,9 +98,49 @@ export async function identificar(
       nome: d.nome.trim(),
       whatsapp: d.whatsapp.trim(),
       email: d.email?.trim() || null,
+      nascimento: isoData(d.nascimento),
+      rua, numero, bairro, cidade,
+      endereco: enderecoComposto,
     };
     await salvarIdentidade(identidade);
     return { ok: true, identidade };
+  } catch {
+    return { ok: false, error: 'Algo deu errado. Tente novamente.' };
+  }
+}
+
+export async function atualizarPerfil(
+  atual: Identidade,
+  d: DadosCadastro
+): Promise<{ ok: boolean; error?: string; identidade?: Identidade }> {
+  try {
+    const rua = d.rua?.trim() || null;
+    const numero = d.numero?.trim() || null;
+    const bairro = d.bairro?.trim() || null;
+    const cidade = d.cidade?.trim() || null;
+    const endereco =
+      [rua && numero ? `${rua}, ${numero}` : rua, bairro, cidade].filter(Boolean).join(' - ') || null;
+    const nascimento = isoData(d.nascimento);
+    const nome = d.nome?.trim() || atual.nome;
+    const email = d.email?.trim() || null;
+
+    const { error } = await supabase.rpc('atualizar_membro', {
+      p_id: atual.pessoaId,
+      p_whatsapp: atual.whatsapp,
+      p_nome: nome,
+      p_email: email,
+      p_nascimento: nascimento,
+      p_rua: rua,
+      p_numero: numero,
+      p_bairro: bairro,
+      p_cidade: cidade,
+      p_endereco: endereco,
+    });
+    if (error) return { ok: false, error: 'Não conseguimos salvar agora. Tente de novo.' };
+
+    const novo: Identidade = { ...atual, nome, email, nascimento, rua, numero, bairro, cidade, endereco };
+    await salvarIdentidade(novo);
+    return { ok: true, identidade: novo };
   } catch {
     return { ok: false, error: 'Algo deu errado. Tente novamente.' };
   }
