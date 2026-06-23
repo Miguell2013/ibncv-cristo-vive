@@ -91,7 +91,7 @@ export default function Home() {
           </View>
           <View style={{ flex: 1 }}>
             <Text style={styles.checkinTitle}>Como está seu coração hoje?</Text>
-            <Text style={styles.checkinSub}>Tire um momento para conversar com Deus.</Text>
+            <Text style={styles.checkinSub}>Um momento com Deus.</Text>
           </View>
           <Text style={{ fontSize: 24 }}>🙂</Text>
         </Pressable>
@@ -190,15 +190,15 @@ const styles = StyleSheet.create({
   prayingNum: { fontFamily: fonts.bodyBold, color: colors.gold },
 
   checkin: {
-    flexDirection: 'row', alignItems: 'center', gap: spacing.md, backgroundColor: colors.surface,
-    borderRadius: radius.lg, padding: spacing.lg, marginTop: spacing.md, borderWidth: 1, borderColor: colors.border, ...shadow.float,
+    flexDirection: 'row', alignItems: 'center', gap: spacing.sm, backgroundColor: colors.surface,
+    borderRadius: radius.lg, paddingVertical: spacing.md, paddingHorizontal: spacing.md, marginTop: spacing.md, borderWidth: 1, borderColor: colors.border, ...shadow.float,
   },
   checkinIcon: {
-    width: 48, height: 48, borderRadius: 24, backgroundColor: colors.surfaceAlt,
+    width: 42, height: 42, borderRadius: 21, backgroundColor: colors.surfaceAlt,
     alignItems: 'center', justifyContent: 'center', borderWidth: 1.5, borderColor: colors.green,
   },
-  checkinTitle: { fontFamily: fonts.bodySemi, color: colors.text, fontSize: 16 },
-  checkinSub: { fontFamily: fonts.body, color: colors.textMuted, fontSize: 13, marginTop: 2 },
+  checkinTitle: { fontFamily: fonts.bodySemi, color: colors.text, fontSize: 15 },
+  checkinSub: { fontFamily: fonts.body, color: colors.textMuted, fontSize: 12, marginTop: 2 },
 
   hero: { minHeight: 230, marginTop: spacing.lg, backgroundColor: colors.surface, borderRadius: radius.lg, justifyContent: 'center', borderWidth: 1, borderColor: colors.gold, ...shadow.glow },
   heroOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(7,14,26,0.45)', borderRadius: radius.lg },
