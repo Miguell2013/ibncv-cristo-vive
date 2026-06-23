@@ -51,8 +51,8 @@ export const spacing = {
 };
 
 // Caminho base do CDN das imagens (Bunny → pasta ibncv/)
-export const CDN =
-  process.env.EXPO_PUBLIC_CDN_BASE || 'https://amara-kiala.b-cdn.net/ibncv';
+// CDN das imagens (Bunny Pull Zone da igreja). Fixo aqui pra não depender de env.
+export const CDN = 'https://ibncv.b-cdn.net';
 
 export const img = {
   logo: `${CDN}/logo.png`,
