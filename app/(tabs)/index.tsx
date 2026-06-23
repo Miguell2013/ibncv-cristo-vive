@@ -59,25 +59,27 @@ export default function Home() {
         <Text style={styles.brand}>CRISTO VIVE</Text>
 
         {/* SAUDAÇÃO + ORANDO */}
-        <View style={styles.greetRow}>
-          <View style={styles.avatarWrap}>
-            <Image source={{ uri: img.pastor }} style={styles.avatarImg} resizeMode="cover" />
+        <View style={styles.greetWrap}>
+          <View style={styles.greetRow}>
+            <View style={styles.avatarWrap}>
+              <Image source={{ uri: img.pastor }} style={styles.avatarImg} resizeMode="cover" />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.greetHi}>Que bom te ver! 🤍</Text>
+              <Text style={styles.greetSub}>Que Deus abençoe o seu dia.</Text>
+            </View>
           </View>
-          <View style={{ flex: 1 }}>
-            <Text style={styles.greetHi}>Que bom te ver! 🤍</Text>
-            <Text style={styles.greetSub}>Que Deus abençoe o seu dia.</Text>
-          </View>
-        </View>
 
-        {orando && orando > 0 ? (
-          <View style={styles.prayingCard}>
-            <Ionicons name="people" size={20} color={colors.gold} />
-            <Text style={styles.prayingText}>
-              Hoje temos <Text style={styles.prayingNum}>{orando}</Text>{' '}
-              {orando === 1 ? 'pedido em intercessão' : 'pedidos em intercessão'}
-            </Text>
-          </View>
-        ) : null}
+          {orando && orando > 0 ? (
+            <View style={styles.prayingCard}>
+              <Ionicons name="people" size={18} color={colors.gold} />
+              <Text style={styles.prayingText}>
+                Hoje <Text style={styles.prayingNum}>{orando}</Text>{' '}
+                {orando === 1 ? 'em intercessão' : 'em intercessão'}
+              </Text>
+            </View>
+          ) : null}
+        </View>
 
         {/* CHECK-IN DO CORAÇÃO */}
         <Pressable
@@ -172,7 +174,8 @@ const styles = StyleSheet.create({
   kicker: { fontFamily: fonts.bodySemi, color: colors.goldSoft, fontSize: 12, letterSpacing: 3, textAlign: 'center' },
   brand: { fontFamily: fonts.display, color: colors.text, fontSize: 27, letterSpacing: 4, textAlign: 'center', marginTop: 0 },
 
-  greetRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, marginTop: spacing.sm },
+  greetWrap: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: spacing.md, marginTop: spacing.md },
+  greetRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, flex: 1, minWidth: 230 },
   avatarWrap: { width: 60, height: 60, borderRadius: 30, borderWidth: 2, borderColor: colors.gold, backgroundColor: colors.surface, overflow: 'hidden', ...shadow.glow },
   avatarImg: { width: '100%', height: '100%' },
   greetHi: { fontFamily: fonts.displaySemi, color: colors.gold, fontSize: 20 },
@@ -180,7 +183,8 @@ const styles = StyleSheet.create({
 
   prayingCard: {
     flexDirection: 'row', alignItems: 'center', gap: spacing.sm, backgroundColor: colors.surface,
-    borderRadius: radius.md, padding: spacing.md, marginTop: spacing.md, borderWidth: 1, borderColor: colors.border, ...shadow.float,
+    borderRadius: radius.md, padding: spacing.md, borderWidth: 1, borderColor: colors.border, ...shadow.float,
+    flexGrow: 1, flexShrink: 1, minWidth: 160,
   },
   prayingText: { fontFamily: fonts.body, color: colors.textMuted, fontSize: 13, flex: 1 },
   prayingNum: { fontFamily: fonts.bodyBold, color: colors.gold },
