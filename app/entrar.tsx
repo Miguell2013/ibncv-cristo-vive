@@ -29,6 +29,8 @@ export default function Entrar() {
   const [nome, setNome] = useState('');
   const [whatsapp, setWhatsapp] = useState('');
   const [email, setEmail] = useState('');
+  const [endereco, setEndereco] = useState('');
+  const [idade, setIdade] = useState('');
   const [loading, setLoading] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
 
@@ -41,7 +43,7 @@ export default function Entrar() {
     if (nome.trim().length < 3) { setErro('Conte seu nome completo.'); return; }
     if (whatsapp.trim().length < 8) { setErro('Digite um WhatsApp válido.'); return; }
     setLoading(true);
-    const r = await identificar(nome, whatsapp, email);
+    const r = await identificar({ nome, whatsapp, email, endereco, idade });
     setLoading(false);
     if (r.ok && r.identidade) {
       setIdentidade(r.identidade);
@@ -67,8 +69,8 @@ export default function Entrar() {
           <Text style={styles.brand}>CRISTO VIVE</Text>
           <View style={styles.goldLine} />
 
-          <Text style={styles.titulo}>Identifique-se</Text>
-          <Text style={styles.sub}>Pra te acompanharmos de perto. Sem senha, leva 20 segundos. 🤍</Text>
+          <Text style={styles.titulo}>Cadastro</Text>
+          <Text style={styles.sub}>Pra te acompanharmos de perto. Leva 20 segundos. 🤍</Text>
 
           <View style={styles.card}>
             <TextInput
@@ -94,6 +96,22 @@ export default function Entrar() {
               placeholderTextColor={colors.textFaint}
               keyboardType="email-address"
               autoCapitalize="none"
+            />
+            <TextInput
+              style={styles.input}
+              value={endereco}
+              onChangeText={setEndereco}
+              placeholder="Endereço (opcional)"
+              placeholderTextColor={colors.textFaint}
+            />
+            <TextInput
+              style={styles.input}
+              value={idade}
+              onChangeText={setIdade}
+              placeholder="Idade (opcional)"
+              placeholderTextColor={colors.textFaint}
+              keyboardType="number-pad"
+              maxLength={3}
             />
 
             {erro && <Text style={styles.erro}>{erro}</Text>}

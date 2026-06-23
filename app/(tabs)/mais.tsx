@@ -68,8 +68,7 @@ export default function Mais() {
               <Ionicons name="log-in-outline" size={20} color={colors.gold} />
             </View>
             <View style={{ flex: 1 }}>
-              <Text style={styles.itemLabel}>Identifique-se</Text>
-              <Text style={styles.itemDesc}>Sem senha · gratuito pra membros</Text>
+              <Text style={styles.itemLabel}>Cadastro</Text>
             </View>
             <Ionicons name="chevron-forward" size={20} color={colors.gold} />
           </Pressable>

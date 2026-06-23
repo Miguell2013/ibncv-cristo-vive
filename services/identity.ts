@@ -8,6 +8,16 @@ export type Identidade = {
   nome: string;
   whatsapp: string;
   email?: string | null;
+  endereco?: string | null;
+  idade?: number | null;
+};
+
+export type DadosCadastro = {
+  nome: string;
+  whatsapp: string;
+  email?: string;
+  endereco?: string;
+  idade?: string; // vem do input como texto
 };
 
 // UUID v4 simples (suficiente pra identificar a pessoa sem depender de libs)
@@ -38,26 +48,29 @@ export async function sair(): Promise<void> {
 
 // Identifica a pessoa (sem senha): cria o registro no CRM e guarda no aparelho.
 export async function identificar(
-  nome: string,
-  whatsapp: string,
-  email?: string
+  d: DadosCadastro
 ): Promise<{ ok: boolean; error?: string; identidade?: Identidade }> {
   try {
     const pessoaId = uuidv4();
+    const idadeNum = d.idade && /^\d+$/.test(d.idade.trim()) ? parseInt(d.idade.trim(), 10) : null;
     const { error } = await supabase.from('pessoas').insert({
       id: pessoaId,
-      nome_completo: nome.trim(),
-      whatsapp: whatsapp.trim() || null,
-      email: email?.trim() || null,
+      nome_completo: d.nome.trim(),
+      whatsapp: d.whatsapp.trim() || null,
+      email: d.email?.trim() || null,
+      endereco: d.endereco?.trim() || null,
+      idade: idadeNum,
       tipo: 'membro',
     });
     if (error) return { ok: false, error: 'Não conseguimos salvar agora. Tente de novo.' };
 
     const identidade: Identidade = {
       pessoaId,
-      nome: nome.trim(),
-      whatsapp: whatsapp.trim(),
-      email: email?.trim() || null,
+      nome: d.nome.trim(),
+      whatsapp: d.whatsapp.trim(),
+      email: d.email?.trim() || null,
+      endereco: d.endereco?.trim() || null,
+      idade: idadeNum,
     };
     await salvarIdentidade(identidade);
     return { ok: true, identidade };
