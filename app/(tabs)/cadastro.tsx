@@ -61,7 +61,6 @@ export default function Cadastro() {
         como_conheceu: como || null,
         observacoes: obs.trim() || null,
         primeira_visita: new Date().toISOString().slice(0, 10),
-        status: 'novo',
       });
       if (error) throw error;
       setDone(true);

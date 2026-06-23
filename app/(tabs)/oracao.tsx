@@ -17,7 +17,13 @@ import { Ionicons } from '@expo/vector-icons';
 import { colors, fonts, radius, spacing, shadow } from '../../constants/theme';
 import { supabase, PedidoOracao } from '../../services/supabase';
 
-const AREAS = ['Saúde', 'Família', 'Trabalho', 'Espiritual', 'Gratidão', 'Outro'];
+const AREAS: { label: string; value: string }[] = [
+  { label: 'Família', value: 'familia' },
+  { label: 'Saúde', value: 'saude' },
+  { label: 'Finanças', value: 'financas' },
+  { label: 'Espiritual', value: 'espiritual' },
+  { label: 'Outro', value: 'outro' },
+];
 
 export default function Oracao() {
   const insets = useSafeAreaInsets();
@@ -74,7 +80,6 @@ export default function Oracao() {
         texto: texto.trim(),
         publico,
         permitir_whatsapp: whats,
-        status: 'novo',
       });
       if (error) throw error;
       setOk(true);
@@ -121,10 +126,10 @@ export default function Oracao() {
             />
             <View style={styles.chips}>
               {AREAS.map((a) => {
-                const active = area === a;
+                const active = area === a.value;
                 return (
-                  <Pressable key={a} style={[styles.chip, active && styles.chipActive]} onPress={() => setArea(active ? '' : a)}>
-                    <Text style={[styles.chipText, active && { color: colors.bg }]}>{a}</Text>
+                  <Pressable key={a.value} style={[styles.chip, active && styles.chipActive]} onPress={() => setArea(active ? '' : a.value)}>
+                    <Text style={[styles.chipText, active && { color: colors.bg }]}>{a.label}</Text>
                   </Pressable>
                 );
               })}
