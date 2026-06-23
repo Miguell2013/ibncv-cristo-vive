@@ -94,12 +94,12 @@ export const shadow = {
     shadowRadius: 14,
     elevation: 8,
   },
-  // Brilho atrás do card → efeito "flutuando"
+  // Brilho discreto atrás do card → efeito "flutuando" sutil
   float: {
     shadowColor: colors.neon,
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.6,
-    shadowRadius: 30,
-    elevation: 14,
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.22,
+    shadowRadius: 10,
+    elevation: 6,
   },
 };
