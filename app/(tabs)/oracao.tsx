@@ -8,13 +8,14 @@ import {
   Pressable,
   ActivityIndicator,
   Switch,
+  ImageBackground,
   useWindowDimensions,
   KeyboardAvoidingView,
   Platform,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { colors, fonts, radius, spacing, shadow } from '../../constants/theme';
+import { colors, fonts, radius, spacing, shadow, img } from '../../constants/theme';
 import { supabase, PedidoOracao } from '../../services/supabase';
 
 const AREAS: { label: string; value: string }[] = [
@@ -108,9 +109,14 @@ export default function Oracao() {
         keyboardShouldPersistTaps="handled"
       >
         <View style={[styles.body, { maxWidth: maxW }]}>
-          <Text style={styles.kicker}>ORAÇÃO</Text>
-          <Text style={styles.title}>Vamos orar com você</Text>
-          <View style={styles.goldLine} />
+          <ImageBackground source={{ uri: img.oracaoHero }} style={styles.hero} imageStyle={{ borderRadius: radius.lg }}>
+            <View style={styles.heroOverlay} />
+            <View style={styles.heroContent}>
+              <Text style={styles.kicker}>ORAÇÃO</Text>
+              <Text style={styles.title}>Vamos orar com você</Text>
+              <View style={styles.goldLine} />
+            </View>
+          </ImageBackground>
           <Text style={styles.subtitle}>
             Compartilhe seu pedido. Nossa equipe e a igreja vão interceder por você.
           </Text>
@@ -215,6 +221,10 @@ export default function Oracao() {
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.bg },
   body: { width: '100%', paddingHorizontal: spacing.md },
+
+  hero: { minHeight: 150, justifyContent: 'flex-end', backgroundColor: colors.surface, borderRadius: radius.lg, marginBottom: spacing.md },
+  heroOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(7,14,26,0.5)', borderRadius: radius.lg },
+  heroContent: { padding: spacing.lg },
 
   kicker: { fontFamily: fonts.bodySemi, color: colors.gold, fontSize: 12, letterSpacing: 3 },
   title: { fontFamily: fonts.display, color: colors.text, fontSize: 28, marginTop: 2 },
