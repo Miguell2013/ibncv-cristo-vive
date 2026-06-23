@@ -1,0 +1,46 @@
+{
+  "expo": {
+    "name": "IBNCV Cristo Vive",
+    "slug": "ibncv-cristo-vive",
+    "scheme": "ibncv",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "icon": "./assets/branding/icon-app.png",
+    "splash": {
+      "image": "./assets/branding/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0C1626"
+    },
+    "web": {
+      "output": "single",
+      "favicon": "./assets/branding/icon-app.png",
+      "bundler": "metro"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.ibncv.cristovive",
+      "icon": "./assets/branding/icon-app.png"
+    },
+    "android": {
+      "package": "com.ibncv.cristovive",
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/branding/icon-app.png",
+        "backgroundColor": "#0C1626"
+      }
+    },
+    "plugins": [
+      "expo-router"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "router": {}
+    }
+  }
+}
