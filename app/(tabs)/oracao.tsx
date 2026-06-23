@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
 
   formCard: {
     backgroundColor: colors.surface, borderRadius: radius.lg, padding: spacing.lg,
-    borderWidth: 1, borderColor: colors.neon, gap: spacing.md, ...shadow.neonGlow,
+    borderWidth: 1, borderColor: colors.border, gap: spacing.md, ...shadow.float,
   },
   input: {
     backgroundColor: colors.surfaceAlt, borderRadius: radius.md, paddingHorizontal: spacing.md,

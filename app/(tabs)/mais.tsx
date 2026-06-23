@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
-import { colors, fonts, radius, spacing, img } from '../../constants/theme';
+import { colors, fonts, radius, spacing, shadow, img } from '../../constants/theme';
 
 const ITENS: { icon: string; label: string; desc: string; action?: () => void }[] = [
   { icon: 'book', label: 'Quem somos', desc: 'Nossa história, visão e valores' },
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
 
   item: {
     flexDirection: 'row', alignItems: 'center', gap: spacing.md, backgroundColor: colors.surface,
-    borderRadius: radius.md, padding: spacing.lg, borderWidth: 1, borderColor: colors.neon, marginBottom: spacing.sm,
+    borderRadius: radius.md, padding: spacing.lg, borderWidth: 1, borderColor: colors.border, marginBottom: spacing.sm, ...shadow.float,
   },
   itemIcon: { width: 44, height: 44, borderRadius: radius.sm, backgroundColor: colors.surfaceAlt, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: colors.border },
   itemLabel: { fontFamily: fonts.bodySemi, color: colors.text, fontSize: 16 },

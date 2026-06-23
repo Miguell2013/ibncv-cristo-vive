@@ -181,14 +181,14 @@ const styles = StyleSheet.create({
 
   prayingCard: {
     flexDirection: 'row', alignItems: 'center', gap: spacing.sm, backgroundColor: colors.surface,
-    borderRadius: radius.md, padding: spacing.md, marginTop: spacing.md, borderWidth: 1, borderColor: colors.neon, ...shadow.neonGlow,
+    borderRadius: radius.md, padding: spacing.md, marginTop: spacing.md, borderWidth: 1, borderColor: colors.border, ...shadow.float,
   },
   prayingText: { fontFamily: fonts.body, color: colors.textMuted, fontSize: 13, flex: 1 },
   prayingNum: { fontFamily: fonts.bodyBold, color: colors.gold },
 
   checkin: {
     flexDirection: 'row', alignItems: 'center', gap: spacing.md, backgroundColor: colors.surface,
-    borderRadius: radius.lg, padding: spacing.lg, marginTop: spacing.md, borderWidth: 1, borderColor: colors.neon, ...shadow.neonGlow,
+    borderRadius: radius.lg, padding: spacing.lg, marginTop: spacing.md, borderWidth: 1, borderColor: colors.border, ...shadow.float,
   },
   checkinIcon: {
     width: 48, height: 48, borderRadius: 24, backgroundColor: colors.surfaceAlt,
@@ -212,7 +212,7 @@ const styles = StyleSheet.create({
   atalhos: { flexDirection: 'row', gap: spacing.sm, marginTop: spacing.lg },
   atalho: {
     flex: 1, backgroundColor: colors.surface, borderRadius: radius.md, paddingVertical: spacing.md,
-    paddingHorizontal: spacing.sm, alignItems: 'center', borderWidth: 1, borderColor: colors.neon,
+    paddingHorizontal: spacing.sm, alignItems: 'center', borderWidth: 1, borderColor: colors.border, ...shadow.float,
   },
   atalhoIcon: {
     width: 46, height: 46, borderRadius: 23, borderWidth: 1.5, alignItems: 'center',

@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
   lembrarOn: { backgroundColor: colors.gold, borderColor: colors.gold },
   lembrarText: { fontFamily: fonts.bodySemi, color: colors.gold, fontSize: 13 },
 
-  notice: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, backgroundColor: colors.surface, borderRadius: radius.lg, padding: spacing.lg, borderWidth: 1, borderColor: colors.neon, marginTop: spacing.sm, width: '100%', ...shadow.neonGlow },
+  notice: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, backgroundColor: colors.surface, borderRadius: radius.lg, padding: spacing.lg, borderWidth: 1, borderColor: colors.border, marginTop: spacing.sm, width: '100%', ...shadow.float },
   noticeIcon: { width: 46, height: 46, borderRadius: 23, backgroundColor: colors.surfaceAlt, alignItems: 'center', justifyContent: 'center', borderWidth: 1.5, borderColor: colors.green },
   noticeTitle: { fontFamily: fonts.bodySemi, color: colors.text, fontSize: 15 },
   noticeSub: { fontFamily: fonts.body, color: colors.textMuted, fontSize: 13, marginTop: 2 },
