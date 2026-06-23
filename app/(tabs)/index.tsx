@@ -52,15 +52,11 @@ export default function Home() {
       <View style={[styles.body, { maxWidth: maxW, paddingTop: insets.top + spacing.md }]}>
         {/* TOPO: logo grande ao lado do nome + sino */}
         <View style={styles.header}>
-          <View style={styles.brandRow}>
-            <Image source={{ uri: img.logo }} style={styles.logo} resizeMode="cover" />
-            <View>
-              <Text style={styles.kicker}>IGREJA BATISTA NACIONAL</Text>
-              <Text style={styles.brand}>CRISTO VIVE</Text>
-            </View>
-          </View>
-          <Ionicons name="notifications-outline" size={24} color={colors.gold} />
+          <Image source={{ uri: img.logo }} style={styles.logo} resizeMode="contain" />
+          <Ionicons name="notifications-outline" size={24} color={colors.gold} style={styles.bell} />
         </View>
+        <Text style={styles.kicker}>IGREJA BATISTA NACIONAL</Text>
+        <Text style={styles.brand}>CRISTO VIVE</Text>
 
         {/* SAUDAÇÃO + ORANDO */}
         <View style={styles.greetRow}>
@@ -170,11 +166,11 @@ const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.bg },
   body: { alignSelf: 'center', width: '100%', paddingHorizontal: spacing.md },
 
-  header: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: spacing.md },
-  brandRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
-  logo: { width: 76, height: 76, borderRadius: radius.md },
-  kicker: { fontFamily: fonts.bodySemi, color: colors.goldSoft, fontSize: 11, letterSpacing: 2 },
-  brand: { fontFamily: fonts.display, color: colors.text, fontSize: 24, letterSpacing: 3, marginTop: 2 },
+  header: { alignItems: 'center', justifyContent: 'center', position: 'relative', marginBottom: spacing.xs },
+  logo: { width: 150, height: 96 },
+  bell: { position: 'absolute', right: 0, top: 24 },
+  kicker: { fontFamily: fonts.bodySemi, color: colors.goldSoft, fontSize: 12, letterSpacing: 3, textAlign: 'center' },
+  brand: { fontFamily: fonts.display, color: colors.text, fontSize: 26, letterSpacing: 4, textAlign: 'center', marginTop: 2 },
 
   greetRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, marginTop: spacing.lg },
   avatarWrap: { width: 60, height: 60, borderRadius: 30, borderWidth: 2, borderColor: colors.gold, backgroundColor: colors.surface, overflow: 'hidden', ...shadow.glow },
