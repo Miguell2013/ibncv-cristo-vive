@@ -1,14 +1,16 @@
 import { Tabs } from 'expo-router';
-import { Platform } from 'react-native';
+import { useWindowDimensions } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors, fonts } from '../../constants/theme';
 
 export default function TabsLayout() {
   const insets = useSafeAreaInsets();
-  // Na web (navegador do celular) a barra do navegador cobre o rodapé → folga extra.
-  const bottomPad = Platform.OS === 'web' ? 26 : insets.bottom + 10;
-  const barHeight = Platform.OS === 'web' ? 90 : 64 + insets.bottom;
+  const { width } = useWindowDimensions();
+  // Só no celular (tela estreita) a barra do navegador cobre o rodapé → folga extra.
+  const isMobile = width < 500;
+  const bottomPad = isMobile ? insets.bottom + 26 : insets.bottom + 8;
+  const barHeight = isMobile ? 88 + insets.bottom : 62 + insets.bottom;
   return (
     <Tabs
       screenOptions={{
