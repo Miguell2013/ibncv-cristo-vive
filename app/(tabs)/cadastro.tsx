@@ -14,6 +14,7 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import { colors, fonts, radius, spacing, shadow, img } from '../../constants/theme';
 import { supabase } from '../../services/supabase';
 
@@ -25,10 +26,29 @@ const TIPOS: { key: Tipo; label: string; desc: string; icon: string }[] = [
   { key: 'membro', label: 'Sou membro', desc: 'Já faço parte daqui', icon: 'people' },
 ];
 
+const SUCESSO: Record<Tipo, { icon: string; title: string; text: string }> = {
+  visitante: {
+    icon: 'hand-left',
+    title: 'Que alegria ter você!',
+    text: 'Recebemos seu contato com carinho. Nossa equipe de acolhimento vai falar com você em breve. Seja muito bem-vindo à família Cristo Vive. 🤍',
+  },
+  novo_convertido: {
+    icon: 'sparkles',
+    title: 'Que decisão linda! 🎉',
+    text: 'O céu está em festa por você! Vamos caminhar contigo nos seus primeiros passos com Jesus. Em breve nossa equipe te procura pra começar essa jornada. 🤍',
+  },
+  membro: {
+    icon: 'people',
+    title: 'Que bom te ter na casa!',
+    text: 'Ficamos felizes que você faz parte da família Cristo Vive. Identifique-se como membro pra acompanhar tudo: seus pedidos, perfil e mais.',
+  },
+};
+
 const COMO: string[] = ['Convite de um amigo', 'Redes sociais', 'Passando na frente', 'Já conhecia', 'Outro'];
 
 export default function Cadastro() {
   const insets = useSafeAreaInsets();
+  const router = useRouter();
   const { width } = useWindowDimensions();
   const maxW = Math.min(width, 640);
 
@@ -77,22 +97,31 @@ export default function Cadastro() {
       <View style={[styles.root, styles.center, { paddingTop: insets.top }]}>
         <View style={[styles.successCard, { maxWidth: maxW }]}>
           <View style={styles.successIcon}>
-            <Ionicons name="heart" size={40} color={colors.gold} />
+            <Ionicons name={SUCESSO[tipo].icon as any} size={40} color={colors.gold} />
           </View>
-          <Text style={styles.successTitle}>Que alegria ter você!</Text>
-          <Text style={styles.successText}>
-            Recebemos o seu contato com carinho. Nossa equipe de acolhimento vai
-            falar com você em breve. Seja muito bem-vindo à família Cristo Vive. 🤍
-          </Text>
+          <Text style={styles.successTitle}>{SUCESSO[tipo].title}</Text>
+          <Text style={styles.successText}>{SUCESSO[tipo].text}</Text>
+
+          {tipo === 'membro' && (
+            <Pressable
+              style={({ pressed }) => [styles.btn, pressed && styles.pressed]}
+              onPress={() => router.push('/entrar' as any)}
+            >
+              <Text style={styles.btnText}>Identificar-me como membro</Text>
+            </Pressable>
+          )}
+
           <Pressable
-            style={({ pressed }) => [styles.btn, pressed && styles.pressed]}
+            style={({ pressed }) => [tipo === 'membro' ? styles.btnGhost : styles.btn, pressed && styles.pressed]}
             onPress={() => {
               setDone(false);
               setNome(''); setWhatsapp(''); setEmail(''); setObs(''); setComo('');
               setTipo('visitante');
             }}
           >
-            <Text style={styles.btnText}>Cadastrar outra pessoa</Text>
+            <Text style={tipo === 'membro' ? styles.btnGhostText : styles.btnText}>
+              {tipo === 'membro' ? 'Voltar' : 'Fazer outro cadastro'}
+            </Text>
           </Pressable>
         </View>
       </View>
@@ -113,7 +142,7 @@ export default function Cadastro() {
           <ImageBackground source={{ uri: img.acolhida }} style={styles.hero} imageStyle={{ borderRadius: radius.lg }}>
             <View style={styles.heroOverlay} />
             <View style={styles.heroContent}>
-              <Text style={styles.kicker}>ACOLHIDA</Text>
+              <Text style={styles.kicker}>ACOLHIMENTO</Text>
               <Text style={styles.title}>Seja bem-vindo</Text>
               <View style={styles.goldLine} />
             </View>
@@ -270,6 +299,8 @@ const styles = StyleSheet.create({
     alignItems: 'center', marginTop: spacing.xl, ...shadow.glow,
   },
   btnText: { fontFamily: fonts.bodyBold, color: colors.bg, fontSize: 16 },
+  btnGhost: { borderRadius: radius.pill, paddingVertical: spacing.md + 2, alignItems: 'center', marginTop: spacing.md, borderWidth: 1, borderColor: colors.border },
+  btnGhostText: { fontFamily: fonts.bodySemi, color: colors.textMuted, fontSize: 15 },
 
   privacy: { fontFamily: fonts.body, color: colors.textFaint, fontSize: 12, textAlign: 'center', marginTop: spacing.lg, lineHeight: 18 },
 
