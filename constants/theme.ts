@@ -65,7 +65,7 @@ export const img = {
   evJovens: `${CDN}/ev-jovens.png.png`,
   evCafe: `${CDN}/ev-cafe-palavra.png.png`,
   // Ainda a subir (gerar e enviar) — ajustar a extensão quando subir:
-  bannerHome: `${CDN}/her%C3%B3i.png`,  // Home: capa "Assistir ao vivo" (arquivo real: herói.png)
+  bannerHome: `${CDN}/hero.png`,        // Home: capa "Assistir ao vivo" (renomear herói.png → hero)
   acolhida: `${CDN}/acolhida.png`,      // tela de Acolhida (imagem limpa)
   oracaoHero: `${CDN}/oracao.png`,      // tela de Oração (imagem limpa)
   edif1: `${CDN}/edif-reino.png`,       // edificação: Reino ou Império
