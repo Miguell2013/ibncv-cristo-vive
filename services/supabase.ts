@@ -103,5 +103,6 @@ export type Evento = {
   recorrente: boolean | null;
   ativo: boolean;
   ordem: number | null;
+  imagem_url: string | null;
   created_at: string;
 };

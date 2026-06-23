@@ -56,13 +56,16 @@ export const CDN =
 
 export const img = {
   logo: `${CDN}/logo.png`,
-  bannerHome: `${CDN}/banner-home.png`,
+  bannerHome: `${CDN}/hero.png`,        // Home: card grande "Cristo Vive" (imagem limpa, sem texto)
+  acolhida: `${CDN}/acolhida.png`,      // tela de cadastro/acolhida (imagem limpa)
+  oracaoHero: `${CDN}/oracao.png`,      // tela de oração (imagem limpa)
+  edif1: `${CDN}/edif-reino.png`,       // edificação: Reino ou Império
+  edif2: `${CDN}/edif-21dias.png`,      // edificação: 21 Dias de Oração
+  // banners dos cultos (texto já embutido na arte) — usados na Agenda
   evCelebracao: `${CDN}/ev-celebracao.png`,
-  evOracao: `${CDN}/ev-oracao.png`,
+  evVida: `${CDN}/ev-vida-abundante.png`,
   evJovens: `${CDN}/ev-jovens.png`,
-  evConferencia: `${CDN}/ev-conferencia.png`,
-  edif1: `${CDN}/edif-1.png`,
-  edif2: `${CDN}/edif-2.png`,
+  evCafe: `${CDN}/ev-cafe-palavra.png`,
 };
 
 export const shadow = {
