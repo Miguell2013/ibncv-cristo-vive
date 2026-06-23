@@ -64,7 +64,9 @@ export default function Home() {
 
         {/* SAUDAÇÃO + ORANDO */}
         <View style={styles.greetRow}>
-          <Image source={{ uri: img.pastor }} style={styles.avatar} resizeMode="cover" />
+          <View style={styles.avatarWrap}>
+            <Image source={{ uri: img.pastor }} style={styles.avatarImg} resizeMode="cover" />
+          </View>
           <View style={{ flex: 1 }}>
             <Text style={styles.greetHi}>Que bom te ver! 🤍</Text>
             <Text style={styles.greetSub}>Que Deus abençoe o seu dia.</Text>
@@ -175,7 +177,8 @@ const styles = StyleSheet.create({
   brand: { fontFamily: fonts.display, color: colors.text, fontSize: 24, letterSpacing: 3, marginTop: 2 },
 
   greetRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, marginTop: spacing.lg },
-  avatar: { width: 60, height: 60, borderRadius: 30, borderWidth: 2, borderColor: colors.gold, backgroundColor: colors.surface, ...shadow.glow },
+  avatarWrap: { width: 60, height: 60, borderRadius: 30, borderWidth: 2, borderColor: colors.gold, backgroundColor: colors.surface, overflow: 'hidden', ...shadow.glow },
+  avatarImg: { width: '100%', height: '100%' },
   greetHi: { fontFamily: fonts.displaySemi, color: colors.gold, fontSize: 20 },
   greetSub: { fontFamily: fonts.body, color: colors.textMuted, fontSize: 13, marginTop: 2 },
 
