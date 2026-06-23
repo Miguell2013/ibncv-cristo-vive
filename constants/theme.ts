@@ -58,7 +58,7 @@ export const CDN = 'https://ibncv.b-cdn.net';
 
 export const img = {
   // Nomes reais no Bunny (vieram com .png dobrado). Já existentes:
-  logo: `${CDN}/logo-transparente.png`, // logo SEM fundo (transparente)
+  logo: `${CDN}/logo-trasparente.png`,  // logo SEM fundo (nome real no Bunny: "trasparente")
   pastor: `${CDN}/pastor.png`,           // foto do pastor (cabeçalho "Que bom te ver")
   evCelebracao: `${CDN}/ev-celebracao.png.png`,
   evVida: `${CDN}/ev-vida-abundante.png.png`,
