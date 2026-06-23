@@ -16,7 +16,7 @@ import {
 } from '@expo-google-fonts/inter';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { colors } from '../constants/theme';
-import { AuthProvider } from '../contexts/auth';
+import { IdentityProvider } from '../contexts/identity';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
@@ -40,7 +40,7 @@ export default function RootLayout() {
 
   return (
     <SafeAreaProvider>
-      <AuthProvider>
+      <IdentityProvider>
         <View style={{ flex: 1, backgroundColor: colors.bg }}>
           <StatusBar style="light" />
           <Stack
@@ -54,7 +54,7 @@ export default function RootLayout() {
             <Stack.Screen name="entrar" options={{ presentation: 'modal' }} />
           </Stack>
         </View>
-      </AuthProvider>
+      </IdentityProvider>
     </SafeAreaProvider>
   );
 }

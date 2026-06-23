@@ -11,8 +11,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { colors, fonts, radius, spacing, shadow, img } from '../../constants/theme';
-import { useAuth } from '../../contexts/auth';
-import { signOut, nomeDoUsuario } from '../../services/auth';
+import { useIdentity } from '../../contexts/identity';
 
 const ITENS: { icon: string; label: string; desc: string; action?: () => void }[] = [
   { icon: 'book', label: 'Quem somos', desc: 'Nossa história, visão e valores' },
@@ -26,7 +25,7 @@ export default function Mais() {
   const router = useRouter();
   const { width } = useWindowDimensions();
   const maxW = Math.min(width, 640);
-  const { signedIn, user } = useAuth();
+  const { identificado, identidade, sair } = useIdentity();
 
   return (
     <ScrollView
@@ -43,18 +42,18 @@ export default function Mais() {
           </View>
         </View>
 
-        {signedIn ? (
+        {identificado ? (
           <View style={styles.contaCard}>
             <View style={styles.contaIcon}>
               <Ionicons name="person" size={20} color={colors.gold} />
             </View>
             <View style={{ flex: 1 }}>
-              <Text style={styles.contaNome}>{nomeDoUsuario(user)}</Text>
-              <Text style={styles.contaEmail} numberOfLines={1}>{user?.email}</Text>
+              <Text style={styles.contaNome} numberOfLines={1}>{identidade?.nome}</Text>
+              <Text style={styles.contaEmail} numberOfLines={1}>{identidade?.whatsapp}</Text>
             </View>
             <Pressable
               style={({ pressed }) => [styles.sairBtn, pressed && styles.pressed]}
-              onPress={() => signOut()}
+              onPress={() => sair()}
             >
               <Ionicons name="log-out-outline" size={16} color={colors.danger} />
               <Text style={styles.sairText}>Sair</Text>
@@ -69,8 +68,8 @@ export default function Mais() {
               <Ionicons name="log-in-outline" size={20} color={colors.gold} />
             </View>
             <View style={{ flex: 1 }}>
-              <Text style={styles.itemLabel}>Entrar ou criar conta</Text>
-              <Text style={styles.itemDesc}>Gratuito pra membros · acompanhe tudo</Text>
+              <Text style={styles.itemLabel}>Identifique-se</Text>
+              <Text style={styles.itemDesc}>Sem senha · gratuito pra membros</Text>
             </View>
             <Ionicons name="chevron-forward" size={20} color={colors.gold} />
           </Pressable>

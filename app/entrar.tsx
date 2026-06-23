@@ -16,57 +16,40 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { colors, fonts, radius, spacing, shadow, img } from '../constants/theme';
-import { signIn, signUp, resetPassword } from '../services/auth';
-
-type Modo = 'entrar' | 'criar' | 'esqueci';
+import { identificar } from '../services/identity';
+import { useIdentity } from '../contexts/identity';
 
 export default function Entrar() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
   const { width } = useWindowDimensions();
+  const { setIdentidade } = useIdentity();
   const maxW = Math.min(width, 480);
 
-  const [modo, setModo] = useState<Modo>('entrar');
   const [nome, setNome] = useState('');
+  const [whatsapp, setWhatsapp] = useState('');
   const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
   const [loading, setLoading] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
-  const [ok, setOk] = useState<string | null>(null);
 
   function voltarApp() {
     try { router.back(); } catch { router.replace('/(tabs)' as any); }
   }
 
   async function enviar() {
-    setErro(null); setOk(null);
-
-    if (modo === 'esqueci') {
-      if (email.trim().length < 5) { setErro('Digite seu e-mail.'); return; }
-      setLoading(true);
-      const r = await resetPassword(email);
-      setLoading(false);
-      if (r.ok) setOk('Enviamos um link de recuperação pro seu e-mail. 🤍');
-      else setErro(r.error || 'Tente novamente.');
-      return;
-    }
-
-    if (modo === 'criar' && nome.trim().length < 3) { setErro('Conte seu nome completo.'); return; }
-    if (email.trim().length < 5) { setErro('Digite um e-mail válido.'); return; }
-    if (senha.length < 6) { setErro('A senha precisa ter ao menos 6 caracteres.'); return; }
-
+    setErro(null);
+    if (nome.trim().length < 3) { setErro('Conte seu nome completo.'); return; }
+    if (whatsapp.trim().length < 8) { setErro('Digite um WhatsApp válido.'); return; }
     setLoading(true);
-    const r = modo === 'criar' ? await signUp(nome, email, senha) : await signIn(email, senha);
+    const r = await identificar(nome, whatsapp, email);
     setLoading(false);
-    if (r.ok) voltarApp();
-    else setErro(r.error || 'Tente novamente.');
+    if (r.ok && r.identidade) {
+      setIdentidade(r.identidade);
+      voltarApp();
+    } else {
+      setErro(r.error || 'Tente novamente.');
+    }
   }
-
-  const titulo = modo === 'criar' ? 'Criar conta' : modo === 'esqueci' ? 'Recuperar senha' : 'Entrar';
-  const sub =
-    modo === 'criar' ? 'Faça parte e acompanhe tudo de perto.'
-    : modo === 'esqueci' ? 'Te enviamos um link pra criar uma nova senha.'
-    : 'Que bom te ver de novo na casa do Pai.';
 
   return (
     <KeyboardAvoidingView style={styles.root} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
@@ -84,47 +67,36 @@ export default function Entrar() {
           <Text style={styles.brand}>CRISTO VIVE</Text>
           <View style={styles.goldLine} />
 
-          <Text style={styles.titulo}>{titulo}</Text>
-          <Text style={styles.sub}>{sub}</Text>
+          <Text style={styles.titulo}>Identifique-se</Text>
+          <Text style={styles.sub}>Pra te acompanharmos de perto. Sem senha, leva 20 segundos. 🤍</Text>
 
           <View style={styles.card}>
-            {modo === 'criar' && (
-              <TextInput
-                style={styles.input}
-                value={nome}
-                onChangeText={setNome}
-                placeholder="Nome completo"
-                placeholderTextColor={colors.textFaint}
-              />
-            )}
+            <TextInput
+              style={styles.input}
+              value={nome}
+              onChangeText={setNome}
+              placeholder="Seu nome completo"
+              placeholderTextColor={colors.textFaint}
+            />
+            <TextInput
+              style={styles.input}
+              value={whatsapp}
+              onChangeText={setWhatsapp}
+              placeholder="WhatsApp (com DDD)"
+              placeholderTextColor={colors.textFaint}
+              keyboardType="phone-pad"
+            />
             <TextInput
               style={styles.input}
               value={email}
               onChangeText={setEmail}
-              placeholder="E-mail"
+              placeholder="E-mail (opcional)"
               placeholderTextColor={colors.textFaint}
               keyboardType="email-address"
               autoCapitalize="none"
             />
-            {modo !== 'esqueci' && (
-              <TextInput
-                style={styles.input}
-                value={senha}
-                onChangeText={setSenha}
-                placeholder="Senha"
-                placeholderTextColor={colors.textFaint}
-                secureTextEntry
-              />
-            )}
-
-            {modo === 'entrar' && (
-              <Pressable onPress={() => { setModo('esqueci'); setErro(null); setOk(null); }}>
-                <Text style={styles.link}>Esqueci minha senha</Text>
-              </Pressable>
-            )}
 
             {erro && <Text style={styles.erro}>{erro}</Text>}
-            {ok && <Text style={styles.ok}>{ok}</Text>}
 
             <Pressable
               style={({ pressed }) => [styles.btn, pressed && styles.pressed, loading && { opacity: 0.7 }]}
@@ -132,25 +104,14 @@ export default function Entrar() {
               disabled={loading}
             >
               {loading ? <ActivityIndicator color={colors.bg} /> : (
-                <Text style={styles.btnText}>
-                  {modo === 'criar' ? 'Criar minha conta' : modo === 'esqueci' ? 'Enviar link' : 'Entrar'}
-                </Text>
+                <Text style={styles.btnText}>Entrar na família</Text>
               )}
             </Pressable>
           </View>
 
-          {modo === 'entrar' && (
-            <Pressable onPress={() => { setModo('criar'); setErro(null); setOk(null); }}>
-              <Text style={styles.troca}>Ainda não tem conta? <Text style={styles.trocaForte}>Criar conta</Text></Text>
-            </Pressable>
-          )}
-          {modo !== 'entrar' && (
-            <Pressable onPress={() => { setModo('entrar'); setErro(null); setOk(null); }}>
-              <Text style={styles.troca}>Já tem conta? <Text style={styles.trocaForte}>Entrar</Text></Text>
-            </Pressable>
-          )}
-
-          <Text style={styles.gratis}>O app é 100% gratuito para os membros. 🤍</Text>
+          <Text style={styles.gratis}>
+            App 100% gratuito pros membros. Você completa o restante do perfil quando quiser. 🙏
+          </Text>
         </View>
       </ScrollView>
     </KeyboardAvoidingView>
@@ -168,7 +129,7 @@ const styles = StyleSheet.create({
   goldLine: { width: 56, height: 2, backgroundColor: colors.gold, marginVertical: spacing.md, borderRadius: 2 },
 
   titulo: { fontFamily: fonts.displaySemi, color: colors.gold, fontSize: 24 },
-  sub: { fontFamily: fonts.body, color: colors.textMuted, fontSize: 14, textAlign: 'center', marginTop: spacing.xs, marginBottom: spacing.lg },
+  sub: { fontFamily: fonts.body, color: colors.textMuted, fontSize: 14, textAlign: 'center', marginTop: spacing.xs, marginBottom: spacing.lg, lineHeight: 21 },
 
   card: {
     width: '100%', backgroundColor: colors.surface, borderRadius: radius.lg, padding: spacing.lg,
@@ -179,18 +140,12 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.md, color: colors.text, fontFamily: fonts.body, fontSize: 15,
     borderWidth: 1, borderColor: colors.border,
   },
-  link: { fontFamily: fonts.bodyMedium, color: colors.neonSoft, fontSize: 13, textAlign: 'right' },
-
   erro: { fontFamily: fonts.bodyMedium, color: colors.danger, fontSize: 13 },
-  ok: { fontFamily: fonts.bodyMedium, color: colors.greenSoft, fontSize: 13, lineHeight: 19 },
 
   btn: { backgroundColor: colors.gold, borderRadius: radius.pill, paddingVertical: spacing.md + 2, alignItems: 'center', ...shadow.glow },
   btnText: { fontFamily: fonts.bodyBold, color: colors.bg, fontSize: 16 },
 
-  troca: { fontFamily: fonts.body, color: colors.textMuted, fontSize: 14, marginTop: spacing.lg },
-  trocaForte: { fontFamily: fonts.bodyBold, color: colors.gold },
-
-  gratis: { fontFamily: fonts.body, color: colors.textFaint, fontSize: 12, textAlign: 'center', marginTop: spacing.lg },
+  gratis: { fontFamily: fonts.body, color: colors.textFaint, fontSize: 12, textAlign: 'center', marginTop: spacing.lg, lineHeight: 18 },
 
   pressed: { opacity: 0.85, transform: [{ scale: 0.99 }] },
 });

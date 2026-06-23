@@ -14,8 +14,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { colors, fonts, radius, spacing, shadow, img } from '../../constants/theme';
 import { supabase } from '../../services/supabase';
-import { useAuth } from '../../contexts/auth';
-import { nomeDoUsuario } from '../../services/auth';
+import { useIdentity } from '../../contexts/identity';
+import { primeiroNome as primeiroNomeDe } from '../../services/identity';
 
 const ATALHOS = [
   { icon: 'calendar', label: 'Cultos', desc: 'Acompanhe nossos cultos e eventos', route: '/agenda', color: colors.gold },
@@ -33,8 +33,9 @@ export default function Home() {
   const router = useRouter();
   const { width } = useWindowDimensions();
   const maxW = Math.min(width, 760);
-  const { signedIn, user } = useAuth();
-  const primeiroNome = signedIn ? nomeDoUsuario(user) : null;
+  const { identificado, identidade } = useIdentity();
+  const signedIn = identificado;
+  const primeiroNome = identificado ? primeiroNomeDe(identidade?.nome) : null;
   const [orando, setOrando] = useState<number | null>(null);
 
   useEffect(() => {
