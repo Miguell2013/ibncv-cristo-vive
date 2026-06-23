@@ -9,7 +9,7 @@ export default function TabsLayout() {
   const { width } = useWindowDimensions();
   // Só no celular (tela estreita) a barra do navegador cobre o rodapé → folga extra.
   const isMobile = width < 500;
-  const bottomPad = isMobile ? insets.bottom + 26 : insets.bottom + 8;
+  const bottomPad = isMobile ? insets.bottom + 30 : insets.bottom + 8;
   const barHeight = isMobile ? 88 + insets.bottom : 62 + insets.bottom;
   return (
     <Tabs
@@ -26,9 +26,12 @@ export default function TabsLayout() {
           paddingTop: 10,
         },
         tabBarLabelStyle: {
-          fontFamily: fonts.bodyMedium,
-          fontSize: 11,
-          marginTop: 2,
+          fontFamily: fonts.bodySemi,
+          fontSize: 10,
+          letterSpacing: 0.5,
+          textTransform: 'uppercase',
+          lineHeight: 14,
+          marginTop: 3,
         },
         tabBarIconStyle: { marginTop: 2 },
       }}
