@@ -14,7 +14,9 @@ import {
   Inter_600SemiBold,
   Inter_700Bold,
 } from '@expo-google-fonts/inter';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { colors } from '../constants/theme';
+import { AuthProvider } from '../contexts/auth';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
@@ -37,17 +39,22 @@ export default function RootLayout() {
   }
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.bg }}>
-      <StatusBar style="light" />
-      <Stack
-        screenOptions={{
-          headerShown: false,
-          contentStyle: { backgroundColor: colors.bg },
-          animation: 'fade',
-        }}
-      >
-        <Stack.Screen name="(tabs)" />
-      </Stack>
-    </View>
+    <SafeAreaProvider>
+      <AuthProvider>
+        <View style={{ flex: 1, backgroundColor: colors.bg }}>
+          <StatusBar style="light" />
+          <Stack
+            screenOptions={{
+              headerShown: false,
+              contentStyle: { backgroundColor: colors.bg },
+              animation: 'fade',
+            }}
+          >
+            <Stack.Screen name="(tabs)" />
+            <Stack.Screen name="entrar" options={{ presentation: 'modal' }} />
+          </Stack>
+        </View>
+      </AuthProvider>
+    </SafeAreaProvider>
   );
 }

@@ -9,7 +9,10 @@ import {
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
+import { useRouter } from 'expo-router';
 import { colors, fonts, radius, spacing, shadow, img } from '../../constants/theme';
+import { useAuth } from '../../contexts/auth';
+import { signOut, nomeDoUsuario } from '../../services/auth';
 
 const ITENS: { icon: string; label: string; desc: string; action?: () => void }[] = [
   { icon: 'book', label: 'Quem somos', desc: 'Nossa história, visão e valores' },
@@ -20,8 +23,10 @@ const ITENS: { icon: string; label: string; desc: string; action?: () => void }[
 
 export default function Mais() {
   const insets = useSafeAreaInsets();
+  const router = useRouter();
   const { width } = useWindowDimensions();
   const maxW = Math.min(width, 640);
+  const { signedIn, user } = useAuth();
 
   return (
     <ScrollView
@@ -37,6 +42,39 @@ export default function Mais() {
             <Text style={styles.brandSub}>Igreja Batista Nacional</Text>
           </View>
         </View>
+
+        {signedIn ? (
+          <View style={styles.contaCard}>
+            <View style={styles.contaIcon}>
+              <Ionicons name="person" size={20} color={colors.gold} />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.contaNome}>{nomeDoUsuario(user)}</Text>
+              <Text style={styles.contaEmail} numberOfLines={1}>{user?.email}</Text>
+            </View>
+            <Pressable
+              style={({ pressed }) => [styles.sairBtn, pressed && styles.pressed]}
+              onPress={() => signOut()}
+            >
+              <Ionicons name="log-out-outline" size={16} color={colors.danger} />
+              <Text style={styles.sairText}>Sair</Text>
+            </Pressable>
+          </View>
+        ) : (
+          <Pressable
+            style={({ pressed }) => [styles.entrarCard, pressed && styles.pressed]}
+            onPress={() => router.push('/entrar' as any)}
+          >
+            <View style={styles.contaIcon}>
+              <Ionicons name="log-in-outline" size={20} color={colors.gold} />
+            </View>
+            <View style={{ flex: 1 }}>
+              <Text style={styles.itemLabel}>Entrar ou criar conta</Text>
+              <Text style={styles.itemDesc}>Gratuito pra membros · acompanhe tudo</Text>
+            </View>
+            <Ionicons name="chevron-forward" size={20} color={colors.gold} />
+          </Pressable>
+        )}
 
         {ITENS.map((it) => (
           <Pressable
@@ -84,6 +122,20 @@ const styles = StyleSheet.create({
   itemIcon: { width: 44, height: 44, borderRadius: radius.sm, backgroundColor: colors.surfaceAlt, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: colors.border },
   itemLabel: { fontFamily: fonts.bodySemi, color: colors.text, fontSize: 16 },
   itemDesc: { fontFamily: fonts.body, color: colors.textMuted, fontSize: 13, marginTop: 2 },
+
+  contaCard: {
+    flexDirection: 'row', alignItems: 'center', gap: spacing.md, backgroundColor: colors.surface,
+    borderRadius: radius.md, padding: spacing.lg, borderWidth: 1, borderColor: colors.gold, marginBottom: spacing.md, ...shadow.glow,
+  },
+  entrarCard: {
+    flexDirection: 'row', alignItems: 'center', gap: spacing.md, backgroundColor: colors.surfaceAlt,
+    borderRadius: radius.md, padding: spacing.lg, borderWidth: 1, borderColor: colors.gold, marginBottom: spacing.md, ...shadow.glow,
+  },
+  contaIcon: { width: 44, height: 44, borderRadius: 22, backgroundColor: colors.surfaceAlt, alignItems: 'center', justifyContent: 'center', borderWidth: 1.5, borderColor: colors.gold },
+  contaNome: { fontFamily: fonts.bodySemi, color: colors.text, fontSize: 16 },
+  contaEmail: { fontFamily: fonts.body, color: colors.textMuted, fontSize: 13, marginTop: 2 },
+  sairBtn: { flexDirection: 'row', alignItems: 'center', gap: 5, backgroundColor: colors.surfaceAlt, borderRadius: radius.pill, paddingVertical: spacing.sm, paddingHorizontal: spacing.md, borderWidth: 1, borderColor: colors.danger },
+  sairText: { fontFamily: fonts.bodySemi, color: colors.danger, fontSize: 13 },
 
   verseBox: { backgroundColor: colors.surface, borderRadius: radius.lg, padding: spacing.lg, marginTop: spacing.xl, borderWidth: 1, borderColor: colors.gold, alignItems: 'center' },
   verseText: { fontFamily: fonts.body, color: colors.text, fontSize: 16, fontStyle: 'italic', textAlign: 'center', lineHeight: 24 },

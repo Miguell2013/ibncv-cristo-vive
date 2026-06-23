@@ -14,6 +14,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { colors, fonts, radius, spacing, shadow, img } from '../../constants/theme';
 import { supabase } from '../../services/supabase';
+import { useAuth } from '../../contexts/auth';
+import { nomeDoUsuario } from '../../services/auth';
 
 const ATALHOS = [
   { icon: 'calendar', label: 'Cultos', desc: 'Acompanhe nossos cultos e eventos', route: '/agenda', color: colors.gold },
@@ -31,6 +33,8 @@ export default function Home() {
   const router = useRouter();
   const { width } = useWindowDimensions();
   const maxW = Math.min(width, 760);
+  const { signedIn, user } = useAuth();
+  const primeiroNome = signedIn ? nomeDoUsuario(user) : null;
   const [orando, setOrando] = useState<number | null>(null);
 
   useEffect(() => {
@@ -61,12 +65,16 @@ export default function Home() {
         {/* SAUDAÇÃO + ORANDO */}
         <View style={styles.greetWrap}>
           <View style={styles.greetRow}>
-            <View style={styles.avatarWrap}>
+            <Pressable style={styles.avatarWrap} onPress={() => router.push('/entrar' as any)}>
               <Image source={{ uri: img.pastor }} style={styles.avatarImg} resizeMode="cover" />
-            </View>
+            </Pressable>
             <View style={{ flex: 1 }}>
-              <Text style={styles.greetHi}>Que bom te ver! 🤍</Text>
-              <Text style={styles.greetSub}>Que Deus abençoe o seu dia.</Text>
+              <Text style={styles.greetHi} numberOfLines={1}>
+                {signedIn ? `Que bom te ver, ${primeiroNome}!` : 'Que bom te ver! 🤍'}
+              </Text>
+              <Text style={styles.greetSub}>
+                {signedIn ? 'Que Deus abençoe o seu dia.' : 'Toque na foto pra entrar.'}
+              </Text>
             </View>
           </View>
 
