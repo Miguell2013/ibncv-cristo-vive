@@ -17,6 +17,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { colors, fonts, radius, spacing, shadow, img } from '../../constants/theme';
 import { supabase, PedidoOracao } from '../../services/supabase';
+import { useIdentity } from '../../contexts/identity';
 
 const AREAS: { label: string; value: string }[] = [
   { label: 'Família', value: 'familia' },
@@ -30,6 +31,7 @@ export default function Oracao() {
   const insets = useSafeAreaInsets();
   const { width } = useWindowDimensions();
   const maxW = Math.min(width, 640);
+  const { identidade, identificado } = useIdentity();
 
   const [nome, setNome] = useState('');
   const [area, setArea] = useState('');
@@ -43,6 +45,13 @@ export default function Oracao() {
   const [mural, setMural] = useState<PedidoOracao[]>([]);
   const [counts, setCounts] = useState<Record<string, number>>({});
   const [orei, setOrei] = useState<Record<string, boolean>>({});
+  const [meus, setMeus] = useState<PedidoOracao[]>([]);
+
+  const carregarMeus = useCallback(async () => {
+    if (!identidade?.pessoaId) { setMeus([]); return; }
+    const { data } = await supabase.rpc('meus_pedidos', { p_id: identidade.pessoaId });
+    setMeus((data as PedidoOracao[]) || []);
+  }, [identidade?.pessoaId]);
 
   const carregarMural = useCallback(async () => {
     const { data } = await supabase
@@ -65,7 +74,7 @@ export default function Oracao() {
     }
   }, []);
 
-  useEffect(() => { carregarMural(); }, [carregarMural]);
+  useEffect(() => { carregarMural(); carregarMeus(); }, [carregarMural, carregarMeus]);
 
   async function enviar() {
     setErro(null);
@@ -76,7 +85,8 @@ export default function Oracao() {
     setLoading(true);
     try {
       const { error } = await supabase.from('pedidos_oracao').insert({
-        autor_nome: nome.trim() || 'Anônimo',
+        autor_nome: identidade?.nome || nome.trim() || 'Anônimo',
+        pessoa_id: identidade?.pessoaId ?? null,
         area: area || null,
         texto: texto.trim(),
         publico,
@@ -86,6 +96,7 @@ export default function Oracao() {
       setOk(true);
       setTexto(''); setArea(''); setNome('');
       carregarMural();
+      carregarMeus();
       setTimeout(() => setOk(false), 4000);
     } catch {
       setErro('Não conseguimos enviar agora. Tente novamente.');
@@ -179,6 +190,34 @@ export default function Oracao() {
             </Pressable>
           </View>
 
+          {/* MEUS PEDIDOS */}
+          {identificado && meus.length > 0 && (
+            <>
+              <View style={styles.sectionRow}>
+                <View style={styles.sectionDot} />
+                <Text style={styles.sectionTitle}>Meus pedidos</Text>
+              </View>
+              {meus.map((p) => (
+                <View key={p.id} style={styles.meuCard}>
+                  <View style={styles.meuTop}>
+                    {p.area ? <Text style={styles.muralArea}>{p.area}</Text> : <View />}
+                    <View style={[styles.statusPill, p.status === 'respondido' && styles.statusOk]}>
+                      <Ionicons
+                        name={p.status === 'respondido' ? 'checkmark-circle' : 'time'}
+                        size={13}
+                        color={p.status === 'respondido' ? colors.green : colors.gold}
+                      />
+                      <Text style={[styles.statusText, p.status === 'respondido' && { color: colors.green }]}>
+                        {p.status === 'respondido' ? 'Respondido' : 'Em intercessão'}
+                      </Text>
+                    </View>
+                  </View>
+                  <Text style={styles.muralTexto}>{p.texto}</Text>
+                </View>
+              ))}
+            </>
+          )}
+
           {/* MURAL */}
           <View style={styles.sectionRow}>
             <View style={styles.sectionDot} />
@@ -263,6 +302,11 @@ const styles = StyleSheet.create({
   empty: { fontFamily: fonts.body, color: colors.textFaint, fontSize: 14, textAlign: 'center', marginTop: spacing.lg },
 
   muralCard: { backgroundColor: colors.surface, borderRadius: radius.md, padding: spacing.lg, borderWidth: 1, borderColor: colors.border, marginBottom: spacing.md },
+  meuCard: { backgroundColor: colors.surface, borderRadius: radius.md, padding: spacing.lg, borderWidth: 1, borderColor: colors.gold, marginBottom: spacing.md, ...shadow.float },
+  meuTop: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: spacing.sm },
+  statusPill: { flexDirection: 'row', alignItems: 'center', gap: 5, backgroundColor: colors.surfaceAlt, borderRadius: radius.pill, paddingVertical: 4, paddingHorizontal: spacing.sm },
+  statusOk: { borderWidth: 1, borderColor: colors.green },
+  statusText: { fontFamily: fonts.bodySemi, color: colors.gold, fontSize: 12 },
   muralHead: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: spacing.sm },
   muralNome: { fontFamily: fonts.bodySemi, color: colors.text, fontSize: 14 },
   muralArea: { fontFamily: fonts.bodyMedium, color: colors.gold, fontSize: 12, backgroundColor: colors.surfaceAlt, paddingHorizontal: spacing.sm, paddingVertical: 3, borderRadius: radius.sm },
