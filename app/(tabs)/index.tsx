@@ -166,8 +166,8 @@ const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.bg },
   body: { alignSelf: 'center', width: '100%', paddingHorizontal: spacing.md },
 
-  header: { alignItems: 'center', justifyContent: 'center', position: 'relative', marginBottom: spacing.xs },
-  logo: { width: 150, height: 96 },
+  header: { alignItems: 'center', justifyContent: 'center', position: 'relative', marginBottom: 0 },
+  logo: { width: 260, height: 130, marginBottom: -14 },
   bell: { position: 'absolute', right: 0, top: 24 },
   kicker: { fontFamily: fonts.bodySemi, color: colors.goldSoft, fontSize: 12, letterSpacing: 3, textAlign: 'center' },
   brand: { fontFamily: fonts.display, color: colors.text, fontSize: 26, letterSpacing: 4, textAlign: 'center', marginTop: 2 },
