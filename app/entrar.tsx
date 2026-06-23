@@ -29,8 +29,11 @@ export default function Entrar() {
   const [nome, setNome] = useState('');
   const [whatsapp, setWhatsapp] = useState('');
   const [email, setEmail] = useState('');
-  const [endereco, setEndereco] = useState('');
-  const [idade, setIdade] = useState('');
+  const [nascimento, setNascimento] = useState('');
+  const [rua, setRua] = useState('');
+  const [numero, setNumero] = useState('');
+  const [bairro, setBairro] = useState('');
+  const [cidade, setCidade] = useState('');
   const [loading, setLoading] = useState(false);
   const [erro, setErro] = useState<string | null>(null);
 
@@ -43,7 +46,7 @@ export default function Entrar() {
     if (nome.trim().length < 3) { setErro('Conte seu nome completo.'); return; }
     if (whatsapp.trim().length < 8) { setErro('Digite um WhatsApp válido.'); return; }
     setLoading(true);
-    const r = await identificar({ nome, whatsapp, email, endereco, idade });
+    const r = await identificar({ nome, whatsapp, email, nascimento, rua, numero, bairro, cidade });
     setLoading(false);
     if (r.ok && r.identidade) {
       setIdentidade(r.identidade);
@@ -99,19 +102,43 @@ export default function Entrar() {
             />
             <TextInput
               style={styles.input}
-              value={endereco}
-              onChangeText={setEndereco}
-              placeholder="Endereço (opcional)"
+              value={nascimento}
+              onChangeText={setNascimento}
+              placeholder="Data de nascimento (DD/MM/AAAA)"
+              placeholderTextColor={colors.textFaint}
+              keyboardType="numbers-and-punctuation"
+              maxLength={10}
+            />
+            <View style={styles.linha}>
+              <TextInput
+                style={[styles.input, { flex: 1 }]}
+                value={rua}
+                onChangeText={setRua}
+                placeholder="Rua"
+                placeholderTextColor={colors.textFaint}
+              />
+              <TextInput
+                style={[styles.input, { width: 92 }]}
+                value={numero}
+                onChangeText={setNumero}
+                placeholder="Nº"
+                placeholderTextColor={colors.textFaint}
+                keyboardType="number-pad"
+              />
+            </View>
+            <TextInput
+              style={styles.input}
+              value={bairro}
+              onChangeText={setBairro}
+              placeholder="Bairro"
               placeholderTextColor={colors.textFaint}
             />
             <TextInput
               style={styles.input}
-              value={idade}
-              onChangeText={setIdade}
-              placeholder="Idade (opcional)"
+              value={cidade}
+              onChangeText={setCidade}
+              placeholder="Cidade"
               placeholderTextColor={colors.textFaint}
-              keyboardType="number-pad"
-              maxLength={3}
             />
 
             {erro && <Text style={styles.erro}>{erro}</Text>}
@@ -158,6 +185,7 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.md, color: colors.text, fontFamily: fonts.body, fontSize: 15,
     borderWidth: 1, borderColor: colors.border,
   },
+  linha: { flexDirection: 'row', gap: spacing.md },
   erro: { fontFamily: fonts.bodyMedium, color: colors.danger, fontSize: 13 },
 
   btn: { backgroundColor: colors.gold, borderRadius: radius.pill, paddingVertical: spacing.md + 2, alignItems: 'center', ...shadow.glow },

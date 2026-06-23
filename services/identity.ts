@@ -8,17 +8,26 @@ export type Identidade = {
   nome: string;
   whatsapp: string;
   email?: string | null;
-  endereco?: string | null;
-  idade?: number | null;
 };
 
 export type DadosCadastro = {
   nome: string;
   whatsapp: string;
   email?: string;
-  endereco?: string;
-  idade?: string; // vem do input como texto
+  nascimento?: string; // DD/MM/AAAA
+  rua?: string;
+  numero?: string;
+  bairro?: string;
+  cidade?: string;
 };
+
+// "DD/MM/AAAA" -> "AAAA-MM-DD" (ou null se inválido)
+function isoData(s?: string): string | null {
+  if (!s) return null;
+  const m = s.trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if (!m) return null;
+  return `${m[3]}-${m[2].padStart(2, '0')}-${m[1].padStart(2, '0')}`;
+}
 
 // UUID v4 simples (suficiente pra identificar a pessoa sem depender de libs)
 function uuidv4(): string {
@@ -52,14 +61,21 @@ export async function identificar(
 ): Promise<{ ok: boolean; error?: string; identidade?: Identidade }> {
   try {
     const pessoaId = uuidv4();
-    const idadeNum = d.idade && /^\d+$/.test(d.idade.trim()) ? parseInt(d.idade.trim(), 10) : null;
+    const rua = d.rua?.trim() || null;
+    const numero = d.numero?.trim() || null;
+    const bairro = d.bairro?.trim() || null;
+    const cidade = d.cidade?.trim() || null;
+    const enderecoComposto =
+      [rua && numero ? `${rua}, ${numero}` : rua, bairro, cidade].filter(Boolean).join(' - ') || null;
+
     const { error } = await supabase.from('pessoas').insert({
       id: pessoaId,
       nome_completo: d.nome.trim(),
       whatsapp: d.whatsapp.trim() || null,
       email: d.email?.trim() || null,
-      endereco: d.endereco?.trim() || null,
-      idade: idadeNum,
+      data_nascimento: isoData(d.nascimento),
+      rua, numero, bairro, cidade,
+      endereco: enderecoComposto,
       tipo: 'membro',
     });
     if (error) return { ok: false, error: 'Não conseguimos salvar agora. Tente de novo.' };
@@ -69,8 +85,6 @@ export async function identificar(
       nome: d.nome.trim(),
       whatsapp: d.whatsapp.trim(),
       email: d.email?.trim() || null,
-      endereco: d.endereco?.trim() || null,
-      idade: idadeNum,
     };
     await salvarIdentidade(identidade);
     return { ok: true, identidade };
