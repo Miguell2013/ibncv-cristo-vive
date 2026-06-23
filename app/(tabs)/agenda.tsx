@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
 
   empty: { fontFamily: fonts.body, color: colors.textFaint, fontSize: 14, textAlign: 'center', marginTop: spacing.xxl },
 
-  card: { backgroundColor: colors.surface, borderRadius: radius.lg, borderWidth: 1, borderColor: colors.border, marginBottom: spacing.lg, overflow: 'hidden', ...shadow.card },
+  card: { backgroundColor: colors.surface, borderRadius: radius.lg, borderWidth: 1, borderColor: colors.gold, marginBottom: spacing.lg, overflow: 'hidden', ...shadow.glow },
   banner: { backgroundColor: colors.surfaceAlt },
   bannerFallback: { backgroundColor: colors.surfaceAlt, alignItems: 'center', justifyContent: 'center', gap: spacing.sm },
   fallbackTitle: { fontFamily: fonts.displaySemi, color: colors.text, fontSize: 18 },
@@ -139,7 +139,7 @@ const styles = StyleSheet.create({
   lembrarOn: { backgroundColor: colors.gold, borderColor: colors.gold },
   lembrarText: { fontFamily: fonts.bodySemi, color: colors.gold, fontSize: 13 },
 
-  notice: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, backgroundColor: colors.surface, borderRadius: radius.lg, padding: spacing.lg, borderWidth: 1, borderColor: colors.border, marginTop: spacing.sm, width: '100%' },
+  notice: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, backgroundColor: colors.surface, borderRadius: radius.lg, padding: spacing.lg, borderWidth: 1, borderColor: colors.neon, marginTop: spacing.sm, width: '100%', ...shadow.neonGlow },
   noticeIcon: { width: 46, height: 46, borderRadius: 23, backgroundColor: colors.surfaceAlt, alignItems: 'center', justifyContent: 'center', borderWidth: 1.5, borderColor: colors.green },
   noticeTitle: { fontFamily: fonts.bodySemi, color: colors.text, fontSize: 15 },
   noticeSub: { fontFamily: fonts.body, color: colors.textMuted, fontSize: 13, marginTop: 2 },

@@ -228,7 +228,7 @@ const styles = StyleSheet.create({
   center: { justifyContent: 'center', alignItems: 'center', padding: spacing.lg },
   body: { width: '100%', paddingHorizontal: spacing.md },
 
-  hero: { minHeight: 150, justifyContent: 'flex-end', backgroundColor: colors.surface, borderRadius: radius.lg, marginBottom: spacing.md },
+  hero: { minHeight: 150, justifyContent: 'flex-end', backgroundColor: colors.surface, borderRadius: radius.lg, marginBottom: spacing.md, borderWidth: 1, borderColor: colors.gold, ...shadow.glow },
   heroOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(7,14,26,0.5)', borderRadius: radius.lg },
   heroContent: { padding: spacing.lg },
 

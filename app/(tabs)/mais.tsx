@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
 
   item: {
     flexDirection: 'row', alignItems: 'center', gap: spacing.md, backgroundColor: colors.surface,
-    borderRadius: radius.md, padding: spacing.lg, borderWidth: 1, borderColor: colors.border, marginBottom: spacing.sm,
+    borderRadius: radius.md, padding: spacing.lg, borderWidth: 1, borderColor: colors.neon, marginBottom: spacing.sm,
   },
   itemIcon: { width: 44, height: 44, borderRadius: radius.sm, backgroundColor: colors.surfaceAlt, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: colors.border },
   itemLabel: { fontFamily: fonts.bodySemi, color: colors.text, fontSize: 16 },

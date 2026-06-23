@@ -222,7 +222,7 @@ const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.bg },
   body: { width: '100%', paddingHorizontal: spacing.md },
 
-  hero: { minHeight: 150, justifyContent: 'flex-end', backgroundColor: colors.surface, borderRadius: radius.lg, marginBottom: spacing.md },
+  hero: { minHeight: 150, justifyContent: 'flex-end', backgroundColor: colors.surface, borderRadius: radius.lg, marginBottom: spacing.md, borderWidth: 1, borderColor: colors.gold, ...shadow.glow },
   heroOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(7,14,26,0.5)', borderRadius: radius.lg },
   heroContent: { padding: spacing.lg },
 
@@ -233,7 +233,7 @@ const styles = StyleSheet.create({
 
   formCard: {
     backgroundColor: colors.surface, borderRadius: radius.lg, padding: spacing.lg,
-    borderWidth: 1, borderColor: colors.border, gap: spacing.md,
+    borderWidth: 1, borderColor: colors.neon, gap: spacing.md, ...shadow.neonGlow,
   },
   input: {
     backgroundColor: colors.surfaceAlt, borderRadius: radius.md, paddingHorizontal: spacing.md,

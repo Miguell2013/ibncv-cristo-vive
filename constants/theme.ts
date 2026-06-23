@@ -2,14 +2,16 @@
 // Premium: azul-noite profundo + dourado sagrado + verde-vida.
 
 export const colors = {
-  bg: '#0C1626',          // fundo principal (azul-noite)
-  bgDeep: '#070E1A',      // fundo mais profundo (gradiente topo)
-  surface: '#15243A',     // cards / superfícies
-  surfaceAlt: '#1C2E48',  // superfície destacada
-  border: '#26395A',      // bordas sutis
+  bg: '#05090F',          // fundo principal (quase preto, p/ contraste)
+  bgDeep: '#02050A',      // fundo mais profundo
+  surface: '#13233C',     // cards / superfícies (azul-noite que se destaca)
+  surfaceAlt: '#1B3050',  // superfície destacada
+  border: '#274064',      // bordas sutis
 
-  gold: '#E6B450',        // dourado sagrado (acento principal)
+  gold: '#E6B450',        // dourado sagrado (acento principal — cards premium)
   goldSoft: '#F2D79B',    // dourado claro (texto sobre escuro)
+  neon: '#38C6FF',        // azul neon (acento secundário — cards de ação)
+  neonSoft: '#8FE0FF',
   green: '#2FB37A',       // verde-vida (ações positivas)
   greenSoft: '#7FD9B4',
 
@@ -57,6 +59,7 @@ export const CDN = 'https://ibncv.b-cdn.net';
 export const img = {
   // Nomes reais no Bunny (vieram com .png dobrado). Já existentes:
   logo: `${CDN}/logo.png.png`,
+  pastor: `${CDN}/pastor.png`,           // foto do pastor (cabeçalho "Que bom te ver")
   evCelebracao: `${CDN}/ev-celebracao.png.png`,
   evVida: `${CDN}/ev-vida-abundante.png.png`,
   evJovens: `${CDN}/ev-jovens.png.png`,
@@ -81,6 +84,13 @@ export const shadow = {
     shadowColor: colors.gold,
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.4,
+    shadowRadius: 14,
+    elevation: 8,
+  },
+  neonGlow: {
+    shadowColor: colors.neon,
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.45,
     shadowRadius: 14,
     elevation: 8,
   },
