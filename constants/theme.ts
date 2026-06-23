@@ -55,17 +55,18 @@ export const spacing = {
 export const CDN = 'https://ibncv.b-cdn.net';
 
 export const img = {
-  logo: `${CDN}/logo.png`,
-  bannerHome: `${CDN}/hero.png`,        // Home: card grande "Cristo Vive" (imagem limpa, sem texto)
-  acolhida: `${CDN}/acolhida.png`,      // tela de cadastro/acolhida (imagem limpa)
-  oracaoHero: `${CDN}/oracao.png`,      // tela de oração (imagem limpa)
+  // Nomes reais no Bunny (vieram com .png dobrado). Já existentes:
+  logo: `${CDN}/logo.png.png`,
+  evCelebracao: `${CDN}/ev-celebracao.png.png`,
+  evVida: `${CDN}/ev-vida-abundante.png.png`,
+  evJovens: `${CDN}/ev-jovens.png.png`,
+  evCafe: `${CDN}/ev-cafe-palavra.png.png`,
+  // Ainda a subir (gerar e enviar) — ajustar a extensão quando subir:
+  bannerHome: `${CDN}/hero.png`,        // Home: card grande "Cristo Vive" (imagem limpa)
+  acolhida: `${CDN}/acolhida.png`,      // tela de Acolhida (imagem limpa)
+  oracaoHero: `${CDN}/oracao.png`,      // tela de Oração (imagem limpa)
   edif1: `${CDN}/edif-reino.png`,       // edificação: Reino ou Império
   edif2: `${CDN}/edif-21dias.png`,      // edificação: 21 Dias de Oração
-  // banners dos cultos (texto já embutido na arte) — usados na Agenda
-  evCelebracao: `${CDN}/ev-celebracao.png`,
-  evVida: `${CDN}/ev-vida-abundante.png`,
-  evJovens: `${CDN}/ev-jovens.png`,
-  evCafe: `${CDN}/ev-cafe-palavra.png`,
 };
 
 export const shadow = {
