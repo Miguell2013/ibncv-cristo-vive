@@ -26,9 +26,9 @@ const ATALHOS = [
 
 const EVENTOS = [
   { titulo: 'Culto de Celebração', quando: 'Domingo · 18h', img: img.evCelebracao },
-  { titulo: 'Culto de Oração', quando: 'Quarta · 19h30', img: img.evOracao },
+  { titulo: 'Culto Vida Abundante', quando: 'Quarta · 19h30', img: img.evOracao },
   { titulo: 'Encontro de Jovens', quando: 'Sábado · 19h', img: img.evJovens },
-  { titulo: 'Conferência Cristo Vive', quando: 'Em breve', img: img.evConferencia },
+  { titulo: 'Culto Café com Palavra', quando: 'Em breve', img: img.evConferencia },
 ];
 
 const EDIFICACAO = [
