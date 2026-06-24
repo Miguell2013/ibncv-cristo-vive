@@ -54,6 +54,7 @@ export default function RootLayout() {
             <Stack.Screen name="entrar" options={{ presentation: 'modal' }} />
             <Stack.Screen name="perfil" />
             <Stack.Screen name="painel" />
+            <Stack.Screen name="comunidade" />
           </Stack>
         </View>
       </IdentityProvider>

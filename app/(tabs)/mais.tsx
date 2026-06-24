@@ -71,6 +71,20 @@ export default function Mais() {
           </Pressable>
         )}
 
+        <Pressable
+          style={({ pressed }) => [styles.item, pressed && styles.pressed]}
+          onPress={() => router.push('/comunidade' as any)}
+        >
+          <View style={styles.itemIcon}>
+            <Ionicons name="people-circle" size={20} color={colors.gold} />
+          </View>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.itemLabel}>Grupos & Departamentos</Text>
+            <Text style={styles.itemDesc}>Sua comunhão na igreja</Text>
+          </View>
+          <Ionicons name="chevron-forward" size={20} color={colors.textFaint} />
+        </Pressable>
+
         {ITENS.map((it) => (
           <Pressable
             key={it.label}
