@@ -49,18 +49,21 @@ export default function Painel() {
   const [pessoas, setPessoas] = useState<Pessoa[]>([]);
   const [pedidos, setPedidos] = useState<PedidoOracao[]>([]);
   const [deps, setDeps] = useState<any[]>([]);
+  const [grupos, setGrupos] = useState<any[]>([]);
 
   const carregar = useCallback(async (p: string) => {
-    const [r, ps, pd, dp] = await Promise.all([
+    const [r, ps, pd, dp, gr] = await Promise.all([
       supabase.rpc('painel_resumo', { p_pin: p }),
       supabase.rpc('painel_pessoas', { p_pin: p }),
       supabase.rpc('painel_pedidos', { p_pin: p }),
       supabase.rpc('painel_departamentos', { p_pin: p }),
+      supabase.rpc('painel_grupos', { p_pin: p }),
     ]);
     setResumo((r.data as any[])?.[0] ?? null);
     setPessoas((ps.data as Pessoa[]) ?? []);
     setPedidos((pd.data as PedidoOracao[]) ?? []);
     setDeps((dp.data as any[]) ?? []);
+    setGrupos((gr.data as any[]) ?? []);
   }, []);
 
   const entrar = useCallback(async (p: string) => {
@@ -80,6 +83,17 @@ export default function Painel() {
     if (depRow) {
       const m = await supabase.rpc('painel_dep_membros', { p_pin: p });
       setModo('lider'); setDepNome(depRow.nome);
+      setPessoas((m.data as Pessoa[]) ?? []);
+      await AsyncStorage.setItem(PIN_KEY, p);
+      setAuthed(true); setLoading(false);
+      return true;
+    }
+    // 3) PIN de grupo de comunhão (líder de grupo)
+    const grp = await supabase.rpc('painel_grupo_info', { p_pin: p });
+    const grpRow = (grp.data as any[])?.[0];
+    if (grpRow) {
+      const m = await supabase.rpc('painel_grupo_membros', { p_pin: p });
+      setModo('lider'); setDepNome(grpRow.nome);
       setPessoas((m.data as Pessoa[]) ?? []);
       await AsyncStorage.setItem(PIN_KEY, p);
       setAuthed(true); setLoading(false);
@@ -185,7 +199,7 @@ export default function Painel() {
         {/* ACESSOS (PINs dos líderes) */}
         {modo === 'equipe' && aba === 'acessos' && (
           <>
-            <Text style={styles.secTitle}>PIN de acesso de cada líder</Text>
+            <Text style={styles.secTitle}>PIN dos departamentos</Text>
             {deps.map((d) => (
               <View key={d.id} style={styles.card}>
                 <View style={styles.cardHead}>
@@ -193,6 +207,16 @@ export default function Painel() {
                   <View style={[styles.badge, { borderColor: colors.neon }]}><Text style={[styles.badgeTxt, { color: colors.neon }]}>{d.total} membros</Text></View>
                 </View>
                 <Text style={styles.linha}>PIN do líder: <Text style={{ fontFamily: fonts.bodyBold, color: colors.gold }}>{d.pin}</Text></Text>
+              </View>
+            ))}
+            <Text style={[styles.secTitle, { marginTop: spacing.lg }]}>PIN dos grupos de comunhão</Text>
+            {grupos.length === 0 ? <Text style={styles.empty}>Nenhum grupo criado.</Text> : grupos.map((g) => (
+              <View key={g.id} style={styles.card}>
+                <View style={styles.cardHead}>
+                  <Text style={styles.cardNome}>{g.nome}</Text>
+                  <View style={[styles.badge, { borderColor: colors.neon }]}><Text style={[styles.badgeTxt, { color: colors.neon }]}>{g.total} membros</Text></View>
+                </View>
+                <Text style={styles.linha}>PIN do líder: <Text style={{ fontFamily: fonts.bodyBold, color: colors.gold }}>{g.pin}</Text></Text>
               </View>
             ))}
           </>
