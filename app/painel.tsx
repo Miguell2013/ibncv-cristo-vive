@@ -45,7 +45,7 @@ export default function Painel() {
   const [modo, setModo] = useState<'equipe' | 'lider'>('equipe');
   const [depNome, setDepNome] = useState('');
   const [resumo, setResumo] = useState<any>(null);
-  const [aba, setAba] = useState<'pessoas' | 'pedidos' | 'departamentos'>('pessoas');
+  const [aba, setAba] = useState<'relatorio' | 'pedidos' | 'acessos'>('relatorio');
   const [pessoas, setPessoas] = useState<Pessoa[]>([]);
   const [pedidos, setPedidos] = useState<PedidoOracao[]>([]);
   const [deps, setDeps] = useState<any[]>([]);
@@ -68,7 +68,7 @@ export default function Painel() {
     // 1) PIN geral (equipe/pastor)
     const master = await supabase.rpc('painel_pin_ok', { p_pin: p });
     if (master.data === true) {
-      setModo('equipe'); setAba('pessoas');
+      setModo('equipe'); setAba('relatorio');
       await carregar(p);
       await AsyncStorage.setItem(PIN_KEY, p);
       setAuthed(true); setLoading(false);
@@ -150,6 +150,21 @@ export default function Painel() {
         {modo === 'lider' ? (
           <Text style={styles.liderSub}>Membros do departamento · {pessoas.length}</Text>
         ) : (
+          <View style={styles.tabs}>
+            <Pressable style={[styles.tab, aba === 'relatorio' && styles.tabOn]} onPress={() => setAba('relatorio')}>
+              <Text style={[styles.tabTxt, aba === 'relatorio' && styles.tabTxtOn]}>Relatório</Text>
+            </Pressable>
+            <Pressable style={[styles.tab, aba === 'pedidos' && styles.tabOn]} onPress={() => setAba('pedidos')}>
+              <Text style={[styles.tabTxt, aba === 'pedidos' && styles.tabTxtOn]}>Pedidos</Text>
+            </Pressable>
+            <Pressable style={[styles.tab, aba === 'acessos' && styles.tabOn]} onPress={() => setAba('acessos')}>
+              <Text style={[styles.tabTxt, aba === 'acessos' && styles.tabTxtOn]}>Acessos</Text>
+            </Pressable>
+          </View>
+        )}
+
+        {/* RELATÓRIO (analítico geral) */}
+        {modo === 'equipe' && aba === 'relatorio' && (
           <>
             <View style={styles.resumoRow}>
               <Resumo n={resumo?.visitantes} label="Visitantes" cor={colors.gold} />
@@ -157,36 +172,34 @@ export default function Painel() {
               <Resumo n={resumo?.membros} label="Membros" cor={colors.neon} />
               <Resumo n={resumo?.pedidos_abertos} label="Pedidos" cor={colors.goldSoft} />
             </View>
-            <View style={styles.tabs}>
-              <Pressable style={[styles.tab, aba === 'pessoas' && styles.tabOn]} onPress={() => setAba('pessoas')}>
-                <Text style={[styles.tabTxt, aba === 'pessoas' && styles.tabTxtOn]}>Pessoas</Text>
-              </Pressable>
-              <Pressable style={[styles.tab, aba === 'pedidos' && styles.tabOn]} onPress={() => setAba('pedidos')}>
-                <Text style={[styles.tabTxt, aba === 'pedidos' && styles.tabTxtOn]}>Pedidos</Text>
-              </Pressable>
-              <Pressable style={[styles.tab, aba === 'departamentos' && styles.tabOn]} onPress={() => setAba('departamentos')}>
-                <Text style={[styles.tabTxt, aba === 'departamentos' && styles.tabTxtOn]}>Deptos</Text>
-              </Pressable>
-            </View>
+            <Text style={styles.secTitle}>Membros por departamento</Text>
+            {deps.map((d) => (
+              <View key={d.id} style={styles.depRow}>
+                <Text style={styles.depNome}>{d.nome}</Text>
+                <Text style={styles.depTotal}>{d.total}</Text>
+              </View>
+            ))}
           </>
         )}
 
-        {/* DEPARTAMENTOS (só equipe) */}
-        {modo === 'equipe' && aba === 'departamentos' && (
-          deps.length === 0 ? <Text style={styles.empty}>Sem departamentos.</Text> :
-          deps.map((d) => (
-            <View key={d.id} style={styles.card}>
-              <View style={styles.cardHead}>
-                <Text style={styles.cardNome}>{d.nome}</Text>
-                <View style={[styles.badge, { borderColor: colors.neon }]}><Text style={[styles.badgeTxt, { color: colors.neon }]}>{d.total} membros</Text></View>
+        {/* ACESSOS (PINs dos líderes) */}
+        {modo === 'equipe' && aba === 'acessos' && (
+          <>
+            <Text style={styles.secTitle}>PIN de acesso de cada líder</Text>
+            {deps.map((d) => (
+              <View key={d.id} style={styles.card}>
+                <View style={styles.cardHead}>
+                  <Text style={styles.cardNome}>{d.nome}</Text>
+                  <View style={[styles.badge, { borderColor: colors.neon }]}><Text style={[styles.badgeTxt, { color: colors.neon }]}>{d.total} membros</Text></View>
+                </View>
+                <Text style={styles.linha}>PIN do líder: <Text style={{ fontFamily: fonts.bodyBold, color: colors.gold }}>{d.pin}</Text></Text>
               </View>
-              <Text style={styles.linha}>PIN do líder: <Text style={{ fontFamily: fonts.bodyBold, color: colors.gold }}>{d.pin}</Text></Text>
-            </View>
-          ))
+            ))}
+          </>
         )}
 
-        {(modo === 'lider' || (modo === 'equipe' && aba === 'pessoas')) && (
-          pessoas.length === 0 ? <Text style={styles.empty}>Ninguém cadastrado ainda.</Text> :
+        {modo === 'lider' && (
+          pessoas.length === 0 ? <Text style={styles.empty}>Nenhum membro neste departamento ainda.</Text> :
           pessoas.map((p) => {
             const t = TIPO_LABEL[p.tipo] || { txt: p.tipo, cor: colors.textMuted };
             return (
@@ -268,6 +281,11 @@ const styles = StyleSheet.create({
   tabTxtOn: { color: colors.bg },
 
   empty: { fontFamily: fonts.body, color: colors.textFaint, fontSize: 14, textAlign: 'center', marginTop: spacing.xl },
+
+  secTitle: { fontFamily: fonts.displaySemi, color: colors.text, fontSize: 16, marginBottom: spacing.sm, marginTop: spacing.sm },
+  depRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', backgroundColor: colors.surface, borderRadius: radius.md, paddingVertical: spacing.md, paddingHorizontal: spacing.lg, borderWidth: 1, borderColor: colors.border, marginBottom: spacing.sm },
+  depNome: { fontFamily: fonts.bodyMedium, color: colors.text, fontSize: 15 },
+  depTotal: { fontFamily: fonts.bodyBold, color: colors.gold, fontSize: 18 },
 
   card: { backgroundColor: colors.surface, borderRadius: radius.md, padding: spacing.lg, borderWidth: 1, borderColor: colors.border, marginBottom: spacing.md },
   cardHead: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: spacing.xs },
