@@ -42,35 +42,52 @@ export default function Painel() {
   const [erro, setErro] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
+  const [modo, setModo] = useState<'equipe' | 'lider'>('equipe');
+  const [depNome, setDepNome] = useState('');
   const [resumo, setResumo] = useState<any>(null);
-  const [aba, setAba] = useState<'pessoas' | 'pedidos'>('pessoas');
+  const [aba, setAba] = useState<'pessoas' | 'pedidos' | 'departamentos'>('pessoas');
   const [pessoas, setPessoas] = useState<Pessoa[]>([]);
   const [pedidos, setPedidos] = useState<PedidoOracao[]>([]);
+  const [deps, setDeps] = useState<any[]>([]);
 
   const carregar = useCallback(async (p: string) => {
-    const [r, ps, pd] = await Promise.all([
+    const [r, ps, pd, dp] = await Promise.all([
       supabase.rpc('painel_resumo', { p_pin: p }),
       supabase.rpc('painel_pessoas', { p_pin: p }),
       supabase.rpc('painel_pedidos', { p_pin: p }),
+      supabase.rpc('painel_departamentos', { p_pin: p }),
     ]);
     setResumo((r.data as any[])?.[0] ?? null);
     setPessoas((ps.data as Pessoa[]) ?? []);
     setPedidos((pd.data as PedidoOracao[]) ?? []);
+    setDeps((dp.data as any[]) ?? []);
   }, []);
 
   const entrar = useCallback(async (p: string) => {
     setErro(null); setLoading(true);
-    const { data, error } = await supabase.rpc('painel_pin_ok', { p_pin: p });
-    if (error || data !== true) {
-      setLoading(false);
-      setErro('PIN incorreto.');
-      return false;
+    // 1) PIN geral (equipe/pastor)
+    const master = await supabase.rpc('painel_pin_ok', { p_pin: p });
+    if (master.data === true) {
+      setModo('equipe'); setAba('pessoas');
+      await carregar(p);
+      await AsyncStorage.setItem(PIN_KEY, p);
+      setAuthed(true); setLoading(false);
+      return true;
     }
-    await AsyncStorage.setItem(PIN_KEY, p);
-    await carregar(p);
-    setAuthed(true);
+    // 2) PIN de departamento (líder)
+    const dep = await supabase.rpc('painel_dep_info', { p_pin: p });
+    const depRow = (dep.data as any[])?.[0];
+    if (depRow) {
+      const m = await supabase.rpc('painel_dep_membros', { p_pin: p });
+      setModo('lider'); setDepNome(depRow.nome);
+      setPessoas((m.data as Pessoa[]) ?? []);
+      await AsyncStorage.setItem(PIN_KEY, p);
+      setAuthed(true); setLoading(false);
+      return true;
+    }
     setLoading(false);
-    return true;
+    setErro('PIN incorreto.');
+    return false;
   }, [carregar]);
 
   useEffect(() => {
@@ -126,29 +143,49 @@ export default function Painel() {
       <View style={[styles.body, { maxWidth: maxW }]}>
         <View style={styles.topRow}>
           <Pressable onPress={() => router.back()} hitSlop={12}><Ionicons name="chevron-back" size={26} color={colors.text} /></Pressable>
-          <Text style={styles.topTitle}>Painel da Equipe</Text>
+          <Text style={styles.topTitle}>{modo === 'lider' ? depNome : 'Painel da Equipe'}</Text>
           <Pressable onPress={sair} hitSlop={12}><Ionicons name="log-out-outline" size={22} color={colors.danger} /></Pressable>
         </View>
 
-        {/* RESUMO */}
-        <View style={styles.resumoRow}>
-          <Resumo n={resumo?.visitantes} label="Visitantes" cor={colors.gold} />
-          <Resumo n={resumo?.convertidos} label="Convertidos" cor={colors.green} />
-          <Resumo n={resumo?.membros} label="Membros" cor={colors.neon} />
-          <Resumo n={resumo?.pedidos_abertos} label="Pedidos" cor={colors.goldSoft} />
-        </View>
+        {modo === 'lider' ? (
+          <Text style={styles.liderSub}>Membros do departamento · {pessoas.length}</Text>
+        ) : (
+          <>
+            <View style={styles.resumoRow}>
+              <Resumo n={resumo?.visitantes} label="Visitantes" cor={colors.gold} />
+              <Resumo n={resumo?.convertidos} label="Convertidos" cor={colors.green} />
+              <Resumo n={resumo?.membros} label="Membros" cor={colors.neon} />
+              <Resumo n={resumo?.pedidos_abertos} label="Pedidos" cor={colors.goldSoft} />
+            </View>
+            <View style={styles.tabs}>
+              <Pressable style={[styles.tab, aba === 'pessoas' && styles.tabOn]} onPress={() => setAba('pessoas')}>
+                <Text style={[styles.tabTxt, aba === 'pessoas' && styles.tabTxtOn]}>Pessoas</Text>
+              </Pressable>
+              <Pressable style={[styles.tab, aba === 'pedidos' && styles.tabOn]} onPress={() => setAba('pedidos')}>
+                <Text style={[styles.tabTxt, aba === 'pedidos' && styles.tabTxtOn]}>Pedidos</Text>
+              </Pressable>
+              <Pressable style={[styles.tab, aba === 'departamentos' && styles.tabOn]} onPress={() => setAba('departamentos')}>
+                <Text style={[styles.tabTxt, aba === 'departamentos' && styles.tabTxtOn]}>Deptos</Text>
+              </Pressable>
+            </View>
+          </>
+        )}
 
-        {/* ABAS */}
-        <View style={styles.tabs}>
-          <Pressable style={[styles.tab, aba === 'pessoas' && styles.tabOn]} onPress={() => setAba('pessoas')}>
-            <Text style={[styles.tabTxt, aba === 'pessoas' && styles.tabTxtOn]}>Pessoas ({pessoas.length})</Text>
-          </Pressable>
-          <Pressable style={[styles.tab, aba === 'pedidos' && styles.tabOn]} onPress={() => setAba('pedidos')}>
-            <Text style={[styles.tabTxt, aba === 'pedidos' && styles.tabTxtOn]}>Pedidos ({pedidos.length})</Text>
-          </Pressable>
-        </View>
+        {/* DEPARTAMENTOS (só equipe) */}
+        {modo === 'equipe' && aba === 'departamentos' && (
+          deps.length === 0 ? <Text style={styles.empty}>Sem departamentos.</Text> :
+          deps.map((d) => (
+            <View key={d.id} style={styles.card}>
+              <View style={styles.cardHead}>
+                <Text style={styles.cardNome}>{d.nome}</Text>
+                <View style={[styles.badge, { borderColor: colors.neon }]}><Text style={[styles.badgeTxt, { color: colors.neon }]}>{d.total} membros</Text></View>
+              </View>
+              <Text style={styles.linha}>PIN do líder: <Text style={{ fontFamily: fonts.bodyBold, color: colors.gold }}>{d.pin}</Text></Text>
+            </View>
+          ))
+        )}
 
-        {aba === 'pessoas' ? (
+        {(modo === 'lider' || (modo === 'equipe' && aba === 'pessoas')) && (
           pessoas.length === 0 ? <Text style={styles.empty}>Ninguém cadastrado ainda.</Text> :
           pessoas.map((p) => {
             const t = TIPO_LABEL[p.tipo] || { txt: p.tipo, cor: colors.textMuted };
@@ -166,7 +203,9 @@ export default function Painel() {
               </View>
             );
           })
-        ) : (
+        )}
+
+        {modo === 'equipe' && aba === 'pedidos' && (
           pedidos.length === 0 ? <Text style={styles.empty}>Nenhum pedido ainda.</Text> :
           pedidos.map((p) => (
             <View key={p.id} style={styles.card}>
@@ -215,6 +254,7 @@ const styles = StyleSheet.create({
 
   topRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: spacing.lg },
   topTitle: { fontFamily: fonts.displaySemi, color: colors.text, fontSize: 18 },
+  liderSub: { fontFamily: fonts.bodyMedium, color: colors.gold, fontSize: 14, marginBottom: spacing.md },
 
   resumoRow: { flexDirection: 'row', gap: spacing.sm, marginBottom: spacing.lg },
   resumoCard: { flex: 1, backgroundColor: colors.surface, borderRadius: radius.md, paddingVertical: spacing.md, alignItems: 'center', borderWidth: 1, borderColor: colors.border },
