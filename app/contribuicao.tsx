@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import {
-  View, Text, StyleSheet, ScrollView, Pressable, Platform, Image,
+  View, Text, StyleSheet, ScrollView, Pressable, Platform, Image, ImageBackground,
   useWindowDimensions,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -8,6 +8,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { colors, fonts, radius, spacing, shadow } from '../constants/theme';
 
+const IMG_SEMEADURA = 'https://ibncv.b-cdn.net/semeadura.png';
 const TITULAR = 'Igreja Batista Nacional Cristo Vive';
 const BANCO = 'Sicoob Credinacional (756) · Coop. 3089';
 
@@ -53,10 +54,13 @@ export default function Contribuicao() {
           <View style={{ width: 26 }} />
         </View>
 
-        <View style={styles.verseBox}>
-          <Text style={styles.verseText}>“Cada um contribua segundo propôs no seu coração; não com tristeza, nem por necessidade; porque Deus ama ao que dá com alegria.”</Text>
-          <Text style={styles.verseRef}>2 Coríntios 9.7</Text>
-        </View>
+        <ImageBackground source={{ uri: IMG_SEMEADURA }} style={styles.hero} imageStyle={styles.heroImg}>
+          <View style={styles.heroOverlay} />
+          <View style={styles.heroContent}>
+            <Text style={styles.heroVerse}>“Aquele que semeia pouco, pouco também colherá; e aquele que semeia com fartura, com abundância também colherá.”</Text>
+            <Text style={styles.heroRef}>2 Coríntios 9.6</Text>
+          </View>
+        </ImageBackground>
 
         {/* DÍZIMOS E OFERTAS */}
         <Text style={styles.sec}>Dízimos e Ofertas</Text>
@@ -132,6 +136,13 @@ const styles = StyleSheet.create({
   body: { width: '100%', paddingHorizontal: spacing.md },
   topRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: spacing.lg },
   topTitle: { fontFamily: fonts.displaySemi, color: colors.text, fontSize: 18 },
+
+  hero: { minHeight: 200, borderRadius: radius.lg, overflow: 'hidden', justifyContent: 'flex-end', marginBottom: spacing.xl, borderWidth: 1, borderColor: colors.gold },
+  heroImg: { borderRadius: radius.lg },
+  heroOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(5,9,15,0.55)' },
+  heroContent: { padding: spacing.lg },
+  heroVerse: { fontFamily: fonts.body, color: '#fff', fontSize: 15, fontStyle: 'italic', lineHeight: 23, textShadowColor: 'rgba(0,0,0,0.8)', textShadowRadius: 6 },
+  heroRef: { fontFamily: fonts.bodyBold, color: colors.gold, fontSize: 13, marginTop: spacing.sm },
 
   verseBox: { backgroundColor: colors.surface, borderRadius: radius.lg, padding: spacing.lg, borderWidth: 1, borderColor: colors.gold, marginBottom: spacing.xl, alignItems: 'center' },
   verseText: { fontFamily: fonts.body, color: colors.text, fontSize: 14, fontStyle: 'italic', textAlign: 'center', lineHeight: 22 },
