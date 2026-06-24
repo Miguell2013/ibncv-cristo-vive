@@ -88,6 +88,20 @@ export default function Mais() {
           </Pressable>
         ))}
 
+        <Pressable
+          style={({ pressed }) => [styles.item, { borderColor: colors.gold }, pressed && styles.pressed]}
+          onPress={() => router.push('/painel' as any)}
+        >
+          <View style={[styles.itemIcon, { borderColor: colors.gold }]}>
+            <Ionicons name="shield-checkmark" size={20} color={colors.gold} />
+          </View>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.itemLabel}>Painel da Equipe</Text>
+            <Text style={styles.itemDesc}>Acesso dos líderes (PIN)</Text>
+          </View>
+          <Ionicons name="chevron-forward" size={20} color={colors.gold} />
+        </Pressable>
+
         <View style={styles.verseBox}>
           <Text style={styles.verseText}>
             “Eu e a minha casa serviremos ao Senhor.”

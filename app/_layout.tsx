@@ -53,6 +53,7 @@ export default function RootLayout() {
             <Stack.Screen name="(tabs)" />
             <Stack.Screen name="entrar" options={{ presentation: 'modal' }} />
             <Stack.Screen name="perfil" />
+            <Stack.Screen name="painel" />
           </Stack>
         </View>
       </IdentityProvider>
