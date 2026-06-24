@@ -328,6 +328,7 @@ export default function Painel() {
                 <View style={[styles.badge, { borderColor: colors.gold }]}><Text style={[styles.badgeTxt, { color: colors.gold }]}>{s.ministerio}</Text></View>
               </View>
               {s.whatsapp ? <Text style={styles.linha}><Ionicons name="logo-whatsapp" size={13} color={colors.green} /> {s.whatsapp}</Text> : null}
+              {s.descricao ? <Text style={styles.obs}>“{s.descricao}”</Text> : null}
               <Text style={styles.data}>{dataBR(s.created_at)}</Text>
             </View>
           ))

@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from 'react';
 import {
-  View, Text, StyleSheet, ScrollView, Pressable, ActivityIndicator,
+  View, Text, StyleSheet, ScrollView, Pressable, ActivityIndicator, TextInput,
   useWindowDimensions,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -18,7 +18,10 @@ export default function Ministerios() {
   const { identidade } = useIdentity();
 
   const [lista, setLista] = useState<any[]>([]);
-  const [meus, setMeus] = useState<string[]>([]);
+  const [enviados, setEnviados] = useState<string[]>([]);
+  const [abertoId, setAbertoId] = useState<string | null>(null);
+  const [desc, setDesc] = useState('');
+  const [enviando, setEnviando] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const carregar = useCallback(async () => {
@@ -29,15 +32,23 @@ export default function Ministerios() {
 
   useEffect(() => { carregar(); }, [carregar]);
 
-  async function servir(minId: string) {
+  function abrir(minId: string) {
     if (!identidade?.pessoaId) { router.push('/entrar' as any); return; }
-    setMeus((arr) => [...arr, minId]);
+    setAbertoId(minId); setDesc('');
+  }
+
+  async function enviar(minId: string) {
+    if (!identidade?.pessoaId) { router.push('/entrar' as any); return; }
+    setEnviando(true);
     await supabase.rpc('quero_servir', {
       p_id: identidade.pessoaId,
       p_nome: identidade.nome,
       p_whatsapp: identidade.whatsapp,
       p_ministerio: minId,
+      p_descricao: desc,
     });
+    setEnviados((arr) => [...arr, minId]);
+    setAbertoId(null); setDesc(''); setEnviando(false);
   }
 
   return (
@@ -54,7 +65,8 @@ export default function Ministerios() {
 
         {loading ? <ActivityIndicator color={colors.gold} style={{ marginTop: spacing.xxl }} /> : (
           lista.map((m) => {
-            const dentro = meus.includes(m.id);
+            const enviado = enviados.includes(m.id);
+            const aberto = abertoId === m.id;
             return (
               <View key={m.id} style={styles.card}>
                 <View style={styles.cardTop}>
@@ -66,9 +78,35 @@ export default function Ministerios() {
                     {m.descricao ? <Text style={styles.desc}>{m.descricao}</Text> : null}
                   </View>
                 </View>
-                <Pressable style={({ pressed }) => [dentro ? styles.btnDentro : styles.btn, pressed && styles.pressed]} onPress={() => servir(m.id)} disabled={dentro}>
-                  <Text style={dentro ? styles.btnDentroTxt : styles.btnTxt}>{dentro ? '✓ Interesse enviado' : 'Quero servir'}</Text>
-                </Pressable>
+
+                {enviado ? (
+                  <View style={styles.btnDentro}>
+                    <Text style={styles.btnDentroTxt}>✓ Interesse enviado</Text>
+                  </View>
+                ) : aberto ? (
+                  <View>
+                    <TextInput
+                      style={styles.textarea}
+                      value={desc}
+                      onChangeText={setDesc}
+                      placeholder="Conte como você pode ajudar — talentos, experiência, disponibilidade (opcional)"
+                      placeholderTextColor={colors.textFaint}
+                      multiline
+                    />
+                    <View style={styles.acoes}>
+                      <Pressable style={({ pressed }) => [styles.btnGhost, pressed && styles.pressed]} onPress={() => { setAbertoId(null); setDesc(''); }}>
+                        <Text style={styles.btnGhostTxt}>Cancelar</Text>
+                      </Pressable>
+                      <Pressable style={({ pressed }) => [styles.btn, { flex: 1 }, pressed && styles.pressed, enviando && { opacity: 0.7 }]} onPress={() => enviar(m.id)} disabled={enviando}>
+                        {enviando ? <ActivityIndicator color={colors.bg} /> : <Text style={styles.btnTxt}>Enviar interesse</Text>}
+                      </Pressable>
+                    </View>
+                  </View>
+                ) : (
+                  <Pressable style={({ pressed }) => [styles.btn, pressed && styles.pressed]} onPress={() => abrir(m.id)}>
+                    <Text style={styles.btnTxt}>Quero servir</Text>
+                  </Pressable>
+                )}
               </View>
             );
           })
@@ -99,6 +137,10 @@ const styles = StyleSheet.create({
   btnTxt: { fontFamily: fonts.bodyBold, color: colors.bg, fontSize: 14 },
   btnDentro: { backgroundColor: colors.surfaceAlt, borderRadius: radius.pill, paddingVertical: spacing.sm + 2, alignItems: 'center', borderWidth: 1, borderColor: colors.green },
   btnDentroTxt: { fontFamily: fonts.bodySemi, color: colors.green, fontSize: 14 },
+  textarea: { backgroundColor: colors.surfaceAlt, borderRadius: radius.md, padding: spacing.md, minHeight: 80, textAlignVertical: 'top', color: colors.text, fontFamily: fonts.body, fontSize: 14, borderWidth: 1, borderColor: colors.border, marginBottom: spacing.sm },
+  acoes: { flexDirection: 'row', gap: spacing.sm },
+  btnGhost: { borderRadius: radius.pill, paddingVertical: spacing.sm + 2, paddingHorizontal: spacing.lg, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: colors.border },
+  btnGhostTxt: { fontFamily: fonts.bodySemi, color: colors.textMuted, fontSize: 14 },
 
   privacy: { fontFamily: fonts.body, color: colors.textFaint, fontSize: 12, textAlign: 'center', marginTop: spacing.lg, lineHeight: 18 },
   pressed: { opacity: 0.85, transform: [{ scale: 0.99 }] },
