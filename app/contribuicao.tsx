@@ -7,6 +7,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { colors, fonts, radius, spacing, shadow } from '../constants/theme';
+import { supabase } from '../services/supabase';
+import { useIdentity } from '../contexts/identity';
 
 const IMG_SEMEADURA = 'https://ibncv.b-cdn.net/semeadura.png';
 const TITULAR = 'Igreja Batista Nacional Cristo Vive';
@@ -33,7 +35,21 @@ export default function Contribuicao() {
   const router = useRouter();
   const { width } = useWindowDimensions();
   const maxW = Math.min(width, 640);
+  const { identidade } = useIdentity();
   const [copiado, setCopiado] = useState<string | null>(null);
+  const [agradecido, setAgradecido] = useState(false);
+
+  async function jaContribui(tipo: string) {
+    setAgradecido(true);
+    try {
+      await supabase.rpc('avisei_contribuicao', {
+        p_id: identidade?.pessoaId ?? null,
+        p_nome: identidade?.nome ?? null,
+        p_whatsapp: identidade?.whatsapp ?? null,
+        p_tipo: tipo,
+      });
+    } catch {}
+  }
 
   function copiar(texto: string, id: string) {
     try {
@@ -43,6 +59,22 @@ export default function Contribuicao() {
     } catch {}
     setCopiado(id);
     setTimeout(() => setCopiado((c) => (c === id ? null : c)), 1800);
+  }
+
+  if (agradecido) {
+    return (
+      <View style={[styles.root, styles.center, { paddingTop: insets.top }]}>
+        <View style={[styles.obrigadoCard, { maxWidth: 380 }]}>
+          <View style={styles.obrigadoIcon}><Ionicons name="heart" size={40} color={colors.gold} /></View>
+          <Text style={styles.obrigadoTitle}>Deus te abençoe! 🤍</Text>
+          <Text style={styles.obrigadoText}>Recebemos seu aviso de contribuição com gratidão. Que o Senhor multiplique sua generosidade e supra todas as suas necessidades.</Text>
+          <Text style={styles.obrigadoVerse}>“E o meu Deus suprirá todas as vossas necessidades, segundo as suas riquezas, em glória.” — Filipenses 4.19</Text>
+          <Pressable style={({ pressed }) => [styles.obrigadoBtn, pressed && styles.pressed]} onPress={() => { setAgradecido(false); router.back(); }}>
+            <Text style={styles.obrigadoBtnTxt}>Voltar ao início</Text>
+          </Pressable>
+        </View>
+      </View>
+    );
   }
 
   return (
@@ -84,6 +116,10 @@ export default function Contribuicao() {
             <Ionicons name={copiado === 'cc-geral' ? 'checkmark' : 'qr-code-outline'} size={15} color={colors.gold} />
             <Text style={styles.copiaColaTxt}>{copiado === 'cc-geral' ? 'Código copiado!' : 'Copiar código (Pix Copia e Cola)'}</Text>
           </Pressable>
+          <Pressable style={({ pressed }) => [styles.jaBtn, pressed && styles.pressed]} onPress={() => jaContribui('oferta')}>
+            <Ionicons name="checkmark-circle" size={16} color={colors.bg} />
+            <Text style={styles.jaBtnTxt}>Já contribuí 🙏</Text>
+          </Pressable>
         </View>
 
         <View style={styles.ofertas}>
@@ -123,6 +159,10 @@ export default function Contribuicao() {
             <Ionicons name={copiado === 'cc-cad' ? 'checkmark' : 'qr-code-outline'} size={15} color={colors.neon} />
             <Text style={styles.copiaColaTxtNeon}>{copiado === 'cc-cad' ? 'Código copiado!' : 'Copiar código (Pix Copia e Cola)'}</Text>
           </Pressable>
+          <Pressable style={({ pressed }) => [styles.jaBtnNeon, pressed && styles.pressed]} onPress={() => jaContribui('cadeiras')}>
+            <Ionicons name="checkmark-circle" size={16} color={colors.bg} />
+            <Text style={styles.jaBtnTxt}>Já contribuí 🙏</Text>
+          </Pressable>
         </View>
 
         <Text style={styles.rodape}>Que Deus multiplique sua generosidade. Obrigado por sustentar a obra! 🙏</Text>
@@ -133,7 +173,20 @@ export default function Contribuicao() {
 
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.bg },
+  center: { justifyContent: 'center', alignItems: 'center', padding: spacing.lg },
   body: { width: '100%', paddingHorizontal: spacing.md },
+
+  jaBtn: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, marginTop: spacing.sm, paddingVertical: spacing.sm + 2, borderRadius: radius.pill, backgroundColor: colors.gold },
+  jaBtnNeon: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, marginTop: spacing.sm, paddingVertical: spacing.sm + 2, borderRadius: radius.pill, backgroundColor: colors.neon },
+  jaBtnTxt: { fontFamily: fonts.bodyBold, color: colors.bg, fontSize: 14 },
+
+  obrigadoCard: { width: '100%', backgroundColor: colors.surface, borderRadius: radius.xl, padding: spacing.xl, alignItems: 'center', borderWidth: 1, borderColor: colors.gold, ...shadow.glow },
+  obrigadoIcon: { width: 86, height: 86, borderRadius: 43, backgroundColor: colors.surfaceAlt, alignItems: 'center', justifyContent: 'center', borderWidth: 1.5, borderColor: colors.gold, marginBottom: spacing.lg },
+  obrigadoTitle: { fontFamily: fonts.display, color: colors.text, fontSize: 24, textAlign: 'center' },
+  obrigadoText: { fontFamily: fonts.body, color: colors.textMuted, fontSize: 14, lineHeight: 22, textAlign: 'center', marginTop: spacing.md },
+  obrigadoVerse: { fontFamily: fonts.body, color: colors.goldSoft, fontSize: 13, fontStyle: 'italic', textAlign: 'center', marginTop: spacing.lg, lineHeight: 20 },
+  obrigadoBtn: { backgroundColor: colors.gold, borderRadius: radius.pill, paddingVertical: spacing.md, paddingHorizontal: spacing.xl, alignItems: 'center', marginTop: spacing.xl, ...shadow.glow },
+  obrigadoBtnTxt: { fontFamily: fonts.bodyBold, color: colors.bg, fontSize: 15 },
   topRow: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: spacing.lg },
   topTitle: { fontFamily: fonts.displaySemi, color: colors.text, fontSize: 18 },
 

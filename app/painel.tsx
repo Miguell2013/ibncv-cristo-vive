@@ -56,15 +56,17 @@ export default function Painel() {
   const [deps, setDeps] = useState<any[]>([]);
   const [grupos, setGrupos] = useState<any[]>([]);
   const [servir, setServir] = useState<any[]>([]);
+  const [contribs, setContribs] = useState<any[]>([]);
 
   const carregar = useCallback(async (p: string) => {
-    const [r, ps, pd, dp, gr, sv] = await Promise.all([
+    const [r, ps, pd, dp, gr, sv, ct] = await Promise.all([
       supabase.rpc('painel_resumo', { p_pin: p }),
       supabase.rpc('painel_pessoas', { p_pin: p }),
       supabase.rpc('painel_pedidos', { p_pin: p }),
       supabase.rpc('painel_departamentos', { p_pin: p }),
       supabase.rpc('painel_grupos', { p_pin: p }),
       supabase.rpc('painel_servir', { p_pin: p }),
+      supabase.rpc('painel_contribuicoes', { p_pin: p }),
     ]);
     setResumo((r.data as any[])?.[0] ?? null);
     setPessoas((ps.data as Pessoa[]) ?? []);
@@ -72,6 +74,7 @@ export default function Painel() {
     setDeps((dp.data as any[]) ?? []);
     setGrupos((gr.data as any[]) ?? []);
     setServir((sv.data as any[]) ?? []);
+    setContribs((ct.data as any[]) ?? []);
   }, []);
 
   const entrar = useCallback(async (p: string) => {
@@ -221,6 +224,16 @@ export default function Painel() {
               <View key={d.id} style={styles.depRow}>
                 <Text style={styles.depNome}>{d.nome}</Text>
                 <Text style={styles.depTotal}>{d.total}</Text>
+              </View>
+            ))}
+
+            <Text style={[styles.secTitle, { marginTop: spacing.lg }]}>Avisaram que contribuíram ({contribs.length})</Text>
+            {contribs.length === 0 ? <Text style={styles.empty}>Nenhum aviso ainda.</Text> : contribs.slice(0, 30).map((c, i) => (
+              <View key={i} style={styles.depRow}>
+                <View style={{ flex: 1 }}>
+                  <Text style={styles.depNome}>{c.nome || 'Anônimo'}{c.whatsapp ? ` · ${c.whatsapp}` : ''}</Text>
+                  <Text style={styles.data}>{c.tipo === 'cadeiras' ? 'Campanha das Cadeiras' : 'Dízimo/Oferta'} · {dataBR(c.created_at)}</Text>
+                </View>
               </View>
             ))}
           </>
