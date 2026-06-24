@@ -21,6 +21,7 @@ export type DadosCadastro = {
   whatsapp: string;
   email?: string;
   nascimento?: string; // DD/MM/AAAA
+  sexo?: 'M' | 'F' | '';
   rua?: string;
   numero?: string;
   bairro?: string;
@@ -87,6 +88,7 @@ export async function identificar(
       whatsapp: d.whatsapp.trim() || null,
       email: d.email?.trim() || null,
       data_nascimento: isoData(d.nascimento),
+      sexo: d.sexo || null,
       rua, numero, bairro, cidade,
       endereco: enderecoComposto,
       tipo: 'membro',

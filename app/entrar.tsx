@@ -30,6 +30,7 @@ export default function Entrar() {
   const [whatsapp, setWhatsapp] = useState('');
   const [email, setEmail] = useState('');
   const [nascimento, setNascimento] = useState('');
+  const [sexo, setSexo] = useState<'M' | 'F' | ''>('');
   const [rua, setRua] = useState('');
   const [numero, setNumero] = useState('');
   const [bairro, setBairro] = useState('');
@@ -46,7 +47,7 @@ export default function Entrar() {
     if (nome.trim().length < 3) { setErro('Conte seu nome completo.'); return; }
     if (whatsapp.trim().length < 8) { setErro('Digite um WhatsApp válido.'); return; }
     setLoading(true);
-    const r = await identificar({ nome, whatsapp, email, nascimento, rua, numero, bairro, cidade });
+    const r = await identificar({ nome, whatsapp, email, nascimento, sexo, rua, numero, bairro, cidade });
     setLoading(false);
     if (r.ok && r.identidade) {
       setIdentidade(r.identidade);
@@ -109,6 +110,16 @@ export default function Entrar() {
               keyboardType="numbers-and-punctuation"
               maxLength={10}
             />
+            <View style={styles.sexoRow}>
+              <Pressable style={[styles.sexoBtn, sexo === 'F' && styles.sexoOn]} onPress={() => setSexo('F')}>
+                <Ionicons name="woman" size={18} color={sexo === 'F' ? colors.bg : colors.textMuted} />
+                <Text style={[styles.sexoTxt, sexo === 'F' && { color: colors.bg }]}>Feminino</Text>
+              </Pressable>
+              <Pressable style={[styles.sexoBtn, sexo === 'M' && styles.sexoOn]} onPress={() => setSexo('M')}>
+                <Ionicons name="man" size={18} color={sexo === 'M' ? colors.bg : colors.textMuted} />
+                <Text style={[styles.sexoTxt, sexo === 'M' && { color: colors.bg }]}>Masculino</Text>
+              </Pressable>
+            </View>
             <View style={styles.linha}>
               <TextInput
                 style={[styles.input, { flex: 1 }]}
@@ -186,6 +197,10 @@ const styles = StyleSheet.create({
     borderWidth: 1, borderColor: colors.border,
   },
   linha: { flexDirection: 'row', gap: spacing.md },
+  sexoRow: { flexDirection: 'row', gap: spacing.md },
+  sexoBtn: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, backgroundColor: colors.surfaceAlt, borderRadius: radius.md, paddingVertical: spacing.md, borderWidth: 1, borderColor: colors.border },
+  sexoOn: { backgroundColor: colors.gold, borderColor: colors.gold },
+  sexoTxt: { fontFamily: fonts.bodySemi, color: colors.textMuted, fontSize: 14 },
   erro: { fontFamily: fonts.bodyMedium, color: colors.danger, fontSize: 13 },
 
   btn: { backgroundColor: colors.gold, borderRadius: radius.pill, paddingVertical: spacing.md + 2, alignItems: 'center', ...shadow.glow },

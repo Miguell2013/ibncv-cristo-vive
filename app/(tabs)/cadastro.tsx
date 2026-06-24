@@ -52,6 +52,12 @@ const SUCESSO: Record<Tipo, { icon: string; title: string; text: string }> = {
 
 const COMO: string[] = ['Convite de um amigo', 'Redes sociais', 'Passando na frente', 'Já conhecia', 'Outro'];
 
+function isoNasc(s: string): string | null {
+  const m = s.trim().match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);
+  if (!m) return null;
+  return `${m[3]}-${m[2].padStart(2, '0')}-${m[1].padStart(2, '0')}`;
+}
+
 export default function Cadastro() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
@@ -63,6 +69,8 @@ export default function Cadastro() {
   const [nome, setNome] = useState('');
   const [whatsapp, setWhatsapp] = useState('');
   const [email, setEmail] = useState('');
+  const [nascimento, setNascimento] = useState('');
+  const [sexo, setSexo] = useState<'M' | 'F' | ''>('');
   const [como, setComo] = useState('');
   const [obs, setObs] = useState('');
   const [loading, setLoading] = useState(false);
@@ -71,7 +79,7 @@ export default function Cadastro() {
 
   function reiniciar() {
     setDone(false); setEtapa('escolha');
-    setNome(''); setWhatsapp(''); setEmail(''); setObs(''); setComo('');
+    setNome(''); setWhatsapp(''); setEmail(''); setObs(''); setComo(''); setNascimento(''); setSexo('');
   }
 
   function escolher(t: Tipo) {
@@ -91,6 +99,8 @@ export default function Cadastro() {
         whatsapp: whatsapp.trim() || null,
         email: email.trim() || null,
         tipo,
+        sexo: sexo || null,
+        data_nascimento: isoNasc(nascimento),
         como_conheceu: como || null,
         observacoes: obs.trim() || null,
         primeira_visita: new Date().toISOString().slice(0, 10),
@@ -190,6 +200,21 @@ export default function Cadastro() {
           <Text style={styles.label}>E-mail</Text>
           <TextInput style={styles.input} value={email} onChangeText={setEmail} placeholder="seu@email.com" placeholderTextColor={colors.textFaint} keyboardType="email-address" autoCapitalize="none" />
 
+          <Text style={styles.label}>Data de nascimento</Text>
+          <TextInput style={styles.input} value={nascimento} onChangeText={setNascimento} placeholder="DD/MM/AAAA" placeholderTextColor={colors.textFaint} keyboardType="numbers-and-punctuation" maxLength={10} />
+
+          <Text style={styles.label}>Sexo</Text>
+          <View style={styles.sexoRow}>
+            <Pressable style={[styles.sexoBtn, sexo === 'F' && styles.sexoOn]} onPress={() => setSexo('F')}>
+              <Ionicons name="woman" size={18} color={sexo === 'F' ? colors.bg : colors.textMuted} />
+              <Text style={[styles.sexoTxt, sexo === 'F' && { color: colors.bg }]}>Feminino</Text>
+            </Pressable>
+            <Pressable style={[styles.sexoBtn, sexo === 'M' && styles.sexoOn]} onPress={() => setSexo('M')}>
+              <Ionicons name="man" size={18} color={sexo === 'M' ? colors.bg : colors.textMuted} />
+              <Text style={[styles.sexoTxt, sexo === 'M' && { color: colors.bg }]}>Masculino</Text>
+            </Pressable>
+          </View>
+
           {tipo === 'visitante' && (
             <>
               <Text style={styles.label}>Como conheceu a igreja?</Text>
@@ -259,6 +284,11 @@ const styles = StyleSheet.create({
   chip: { backgroundColor: colors.surface, borderRadius: radius.pill, paddingVertical: spacing.sm, paddingHorizontal: spacing.md, borderWidth: 1, borderColor: colors.border },
   chipActive: { backgroundColor: colors.gold, borderColor: colors.gold },
   chipText: { fontFamily: fonts.bodyMedium, color: colors.textMuted, fontSize: 13 },
+
+  sexoRow: { flexDirection: 'row', gap: spacing.md },
+  sexoBtn: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, backgroundColor: colors.surface, borderRadius: radius.md, paddingVertical: spacing.md, borderWidth: 1, borderColor: colors.border },
+  sexoOn: { backgroundColor: colors.gold, borderColor: colors.gold },
+  sexoTxt: { fontFamily: fonts.bodySemi, color: colors.textMuted, fontSize: 14 },
 
   erro: { fontFamily: fonts.bodyMedium, color: colors.danger, fontSize: 13, marginTop: spacing.lg },
 
