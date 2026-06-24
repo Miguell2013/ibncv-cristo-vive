@@ -37,6 +37,7 @@ export default function Home() {
   const signedIn = identificado;
   const primeiroNome = identificado ? primeiroNomeDe(identidade?.nome) : null;
   const [orando, setOrando] = useState<number | null>(null);
+  const [naoLidas, setNaoLidas] = useState(0);
 
   useEffect(() => {
     (async () => {
@@ -45,8 +46,12 @@ export default function Home() {
         .select('id', { count: 'exact', head: true })
         .eq('status', 'em_intercessao');
       setOrando(count ?? 0);
+      if (identidade?.pessoaId) {
+        const r = await supabase.rpc('contar_nao_lidas', { p_id: identidade.pessoaId });
+        setNaoLidas((r.data as number) ?? 0);
+      }
     })();
-  }, []);
+  }, [identidade?.pessoaId]);
 
   return (
     <ScrollView
@@ -58,7 +63,14 @@ export default function Home() {
         {/* TOPO: logo grande ao lado do nome + sino */}
         <View style={styles.header}>
           <Image source={{ uri: img.logo }} style={styles.logo} resizeMode="contain" />
-          <Ionicons name="notifications-outline" size={24} color={colors.gold} style={styles.bell} />
+          <Pressable style={styles.bell} hitSlop={12} onPress={() => router.push('/avisos' as any)}>
+            <Ionicons name="notifications-outline" size={24} color={colors.gold} />
+            {naoLidas > 0 && (
+              <View style={styles.badge}>
+                <Text style={styles.badgeTxt}>{naoLidas > 9 ? '9+' : naoLidas}</Text>
+              </View>
+            )}
+          </Pressable>
         </View>
         <Text style={styles.kicker}>IGREJA BATISTA NACIONAL</Text>
         <Text style={styles.brand}>CRISTO VIVE</Text>
@@ -180,6 +192,8 @@ const styles = StyleSheet.create({
   header: { alignItems: 'center', justifyContent: 'center', position: 'relative' },
   logo: { width: 215, height: 108, marginTop: -14, marginBottom: -22 },
   bell: { position: 'absolute', right: 0, top: 14 },
+  badge: { position: 'absolute', top: -4, right: -5, minWidth: 16, height: 16, borderRadius: 8, backgroundColor: colors.danger, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 3 },
+  badgeTxt: { fontFamily: fonts.bodyBold, color: '#fff', fontSize: 10 },
   kicker: { fontFamily: fonts.bodySemi, color: colors.goldSoft, fontSize: 12, letterSpacing: 3, textAlign: 'center' },
   brand: { fontFamily: fonts.display, color: colors.text, fontSize: 27, letterSpacing: 4, textAlign: 'center', marginTop: 0 },
 

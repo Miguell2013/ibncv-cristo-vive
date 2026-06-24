@@ -57,6 +57,7 @@ export default function RootLayout() {
             <Stack.Screen name="comunidade" />
             <Stack.Screen name="ministerios" />
             <Stack.Screen name="contribuicao" />
+            <Stack.Screen name="avisos" />
           </Stack>
         </View>
       </IdentityProvider>
