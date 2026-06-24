@@ -55,6 +55,7 @@ export default function RootLayout() {
             <Stack.Screen name="perfil" />
             <Stack.Screen name="painel" />
             <Stack.Screen name="comunidade" />
+            <Stack.Screen name="ministerios" />
           </Stack>
         </View>
       </IdentityProvider>

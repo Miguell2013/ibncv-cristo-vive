@@ -50,25 +50,28 @@ export default function Painel() {
   const [pushBusy, setPushBusy] = useState(false);
   const [depNome, setDepNome] = useState('');
   const [resumo, setResumo] = useState<any>(null);
-  const [aba, setAba] = useState<'relatorio' | 'pedidos' | 'acessos'>('relatorio');
+  const [aba, setAba] = useState<'relatorio' | 'pedidos' | 'servir' | 'acessos'>('relatorio');
   const [pessoas, setPessoas] = useState<Pessoa[]>([]);
   const [pedidos, setPedidos] = useState<PedidoOracao[]>([]);
   const [deps, setDeps] = useState<any[]>([]);
   const [grupos, setGrupos] = useState<any[]>([]);
+  const [servir, setServir] = useState<any[]>([]);
 
   const carregar = useCallback(async (p: string) => {
-    const [r, ps, pd, dp, gr] = await Promise.all([
+    const [r, ps, pd, dp, gr, sv] = await Promise.all([
       supabase.rpc('painel_resumo', { p_pin: p }),
       supabase.rpc('painel_pessoas', { p_pin: p }),
       supabase.rpc('painel_pedidos', { p_pin: p }),
       supabase.rpc('painel_departamentos', { p_pin: p }),
       supabase.rpc('painel_grupos', { p_pin: p }),
+      supabase.rpc('painel_servir', { p_pin: p }),
     ]);
     setResumo((r.data as any[])?.[0] ?? null);
     setPessoas((ps.data as Pessoa[]) ?? []);
     setPedidos((pd.data as PedidoOracao[]) ?? []);
     setDeps((dp.data as any[]) ?? []);
     setGrupos((gr.data as any[]) ?? []);
+    setServir((sv.data as any[]) ?? []);
   }, []);
 
   const entrar = useCallback(async (p: string) => {
@@ -195,6 +198,9 @@ export default function Painel() {
             <Pressable style={[styles.tab, aba === 'pedidos' && styles.tabOn]} onPress={() => setAba('pedidos')}>
               <Text style={[styles.tabTxt, aba === 'pedidos' && styles.tabTxtOn]}>Pedidos</Text>
             </Pressable>
+            <Pressable style={[styles.tab, aba === 'servir' && styles.tabOn]} onPress={() => setAba('servir')}>
+              <Text style={[styles.tabTxt, aba === 'servir' && styles.tabTxtOn]}>Servir</Text>
+            </Pressable>
             <Pressable style={[styles.tab, aba === 'acessos' && styles.tabOn]} onPress={() => setAba('acessos')}>
               <Text style={[styles.tabTxt, aba === 'acessos' && styles.tabTxtOn]}>Acessos</Text>
             </Pressable>
@@ -309,6 +315,20 @@ export default function Painel() {
                   </Pressable>
                 )}
               </View>
+            </View>
+          ))
+        )}
+
+        {modo === 'equipe' && aba === 'servir' && (
+          servir.length === 0 ? <Text style={styles.empty}>Ninguém se candidatou a servir ainda.</Text> :
+          servir.map((s, i) => (
+            <View key={i} style={styles.card}>
+              <View style={styles.cardHead}>
+                <Text style={styles.cardNome}>{s.nome || 'Sem nome'}</Text>
+                <View style={[styles.badge, { borderColor: colors.gold }]}><Text style={[styles.badgeTxt, { color: colors.gold }]}>{s.ministerio}</Text></View>
+              </View>
+              {s.whatsapp ? <Text style={styles.linha}><Ionicons name="logo-whatsapp" size={13} color={colors.green} /> {s.whatsapp}</Text> : null}
+              <Text style={styles.data}>{dataBR(s.created_at)}</Text>
             </View>
           ))
         )}

@@ -13,9 +13,9 @@ import { useRouter } from 'expo-router';
 import { colors, fonts, radius, spacing, shadow, img } from '../../constants/theme';
 import { useIdentity } from '../../contexts/identity';
 
-const ITENS: { icon: string; label: string; desc: string; action?: () => void }[] = [
+const ITENS: { icon: string; label: string; desc: string; rota?: string }[] = [
   { icon: 'book', label: 'Quem somos', desc: 'Nossa história, visão e valores' },
-  { icon: 'people', label: 'Ministérios', desc: 'Encontre seu lugar pra servir' },
+  { icon: 'people', label: 'Ministérios', desc: 'Encontre seu lugar pra servir', rota: '/ministerios' },
   { icon: 'cash', label: 'Contribuição', desc: 'Dízimos e ofertas com fé' },
   { icon: 'location', label: 'Onde estamos', desc: 'Endereço e como chegar' },
 ];
@@ -89,7 +89,7 @@ export default function Mais() {
           <Pressable
             key={it.label}
             style={({ pressed }) => [styles.item, pressed && styles.pressed]}
-            onPress={it.action}
+            onPress={() => { if (it.rota) router.push(it.rota as any); }}
           >
             <View style={styles.itemIcon}>
               <Ionicons name={it.icon as any} size={20} color={colors.gold} />
