@@ -20,7 +20,7 @@ import { primeiroNome as primeiroNomeDe } from '../../services/identity';
 const ATALHOS = [
   { icon: 'calendar', label: 'Cultos', desc: 'Acompanhe nossos cultos e eventos', route: '/agenda', color: colors.gold },
   { icon: 'flame', label: 'Pedidos de Oração', desc: 'Deixe seu pedido de oração', route: '/oracao', color: colors.green },
-  { icon: 'heart', label: 'Contribuir', desc: 'Seja um mantenedor', route: '/mais', color: colors.green },
+  { icon: 'logo-usd', label: 'Contribuir', desc: 'Seja um mantenedor', route: '/contribuicao', color: colors.gold },
 ] as const;
 
 const EDIFICACAO = [
