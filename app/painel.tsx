@@ -235,7 +235,8 @@ export default function Painel() {
                 {p.whatsapp ? <Text style={styles.linha}><Ionicons name="logo-whatsapp" size={13} color={colors.green} /> {p.whatsapp}</Text> : null}
                 {p.email ? <Text style={styles.linha}><Ionicons name="mail" size={13} color={colors.textFaint} /> {p.email}</Text> : null}
                 {(p as any).endereco ? <Text style={styles.linha}><Ionicons name="location" size={13} color={colors.textFaint} /> {(p as any).endereco}</Text> : null}
-                <Text style={styles.data}>{dataBR(p.created_at)}{p.como_conheceu ? ` · ${p.como_conheceu}` : ''}</Text>
+                {(p as any).data_nascimento ? <Text style={styles.linha}><Ionicons name="gift" size={13} color={colors.textFaint} /> Nasc.: {dataBR((p as any).data_nascimento)}</Text> : null}
+                <Text style={styles.data}>Cadastro: {dataBR(p.created_at)}{p.como_conheceu ? ` · ${p.como_conheceu}` : ''}</Text>
                 {p.observacoes ? <Text style={styles.obs}>“{p.observacoes}”</Text> : null}
               </View>
             );
