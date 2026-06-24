@@ -17,6 +17,7 @@ import { useRouter } from 'expo-router';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { colors, fonts, radius, spacing, shadow } from '../constants/theme';
 import { supabase, Pessoa, PedidoOracao } from '../services/supabase';
+import { ativarAvisosGrupo } from '../services/push';
 
 const PIN_KEY = 'ibncv_painel_pin';
 
@@ -43,6 +44,9 @@ export default function Painel() {
   const [loading, setLoading] = useState(false);
 
   const [modo, setModo] = useState<'equipe' | 'lider'>('equipe');
+  const [ehGrupo, setEhGrupo] = useState(false);
+  const [pushMsg, setPushMsg] = useState<string | null>(null);
+  const [pushBusy, setPushBusy] = useState(false);
   const [depNome, setDepNome] = useState('');
   const [resumo, setResumo] = useState<any>(null);
   const [aba, setAba] = useState<'relatorio' | 'pedidos' | 'acessos'>('relatorio');
@@ -82,7 +86,7 @@ export default function Painel() {
     const depRow = (dep.data as any[])?.[0];
     if (depRow) {
       const m = await supabase.rpc('painel_dep_membros', { p_pin: p });
-      setModo('lider'); setDepNome(depRow.nome);
+      setModo('lider'); setEhGrupo(false); setDepNome(depRow.nome);
       setPessoas((m.data as Pessoa[]) ?? []);
       await AsyncStorage.setItem(PIN_KEY, p);
       setAuthed(true); setLoading(false);
@@ -93,7 +97,7 @@ export default function Painel() {
     const grpRow = (grp.data as any[])?.[0];
     if (grpRow) {
       const m = await supabase.rpc('painel_grupo_membros', { p_pin: p });
-      setModo('lider'); setDepNome(grpRow.nome);
+      setModo('lider'); setEhGrupo(true); setDepNome(grpRow.nome);
       setPessoas((m.data as Pessoa[]) ?? []);
       await AsyncStorage.setItem(PIN_KEY, p);
       setAuthed(true); setLoading(false);
@@ -114,6 +118,12 @@ export default function Painel() {
   async function responder(id: string) {
     await supabase.rpc('painel_responder', { p_pin: pin, p_pedido: id });
     setPedidos((arr) => arr.map((x) => (x.id === id ? { ...x, status: 'respondido' } : x)));
+  }
+
+  async function ativar() {
+    setPushBusy(true); setPushMsg(null);
+    const r = await ativarAvisosGrupo(pin);
+    setPushMsg(r.msg); setPushBusy(false);
   }
 
   async function sair() {
@@ -162,7 +172,7 @@ export default function Painel() {
         </View>
 
         {modo === 'lider' ? (
-          <Text style={styles.liderSub}>Membros do departamento · {pessoas.length}</Text>
+          <Text style={styles.liderSub}>Membros {ehGrupo ? 'do grupo' : 'do departamento'} · {pessoas.length}</Text>
         ) : (
           <View style={styles.tabs}>
             <Pressable style={[styles.tab, aba === 'relatorio' && styles.tabOn]} onPress={() => setAba('relatorio')}>
@@ -220,6 +230,20 @@ export default function Painel() {
               </View>
             ))}
           </>
+        )}
+
+        {modo === 'lider' && ehGrupo && (
+          <View style={styles.avisoCard}>
+            <View style={styles.avisoHead}>
+              <Ionicons name="notifications" size={18} color={colors.neon} />
+              <Text style={styles.avisoTitle}>Avisos do grupo</Text>
+            </View>
+            <Text style={styles.avisoSub}>Receba uma notificação no celular sempre que alguém pedir pra entrar neste grupo.</Text>
+            <Pressable style={({ pressed }) => [styles.avisoBtn, pressed && styles.pressed, pushBusy && { opacity: 0.7 }]} onPress={ativar} disabled={pushBusy}>
+              {pushBusy ? <ActivityIndicator color={colors.bg} /> : <Text style={styles.avisoBtnTxt}>Ativar avisos neste aparelho</Text>}
+            </Pressable>
+            {pushMsg && <Text style={styles.avisoMsg}>{pushMsg}</Text>}
+          </View>
         )}
 
         {modo === 'lider' && (
@@ -332,6 +356,14 @@ const styles = StyleSheet.create({
   btn: { backgroundColor: colors.gold, borderRadius: radius.pill, paddingVertical: spacing.md + 2, alignItems: 'center', marginTop: spacing.lg, width: '100%', ...shadow.glow },
   btnText: { fontFamily: fonts.bodyBold, color: colors.bg, fontSize: 16 },
   voltar: { fontFamily: fonts.bodyMedium, color: colors.textMuted, fontSize: 14, marginTop: spacing.md },
+
+  avisoCard: { backgroundColor: colors.surface, borderRadius: radius.md, padding: spacing.lg, borderWidth: 1, borderColor: colors.neon, marginBottom: spacing.md, ...shadow.float },
+  avisoHead: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs, marginBottom: spacing.xs },
+  avisoTitle: { fontFamily: fonts.bodySemi, color: colors.text, fontSize: 15 },
+  avisoSub: { fontFamily: fonts.body, color: colors.textMuted, fontSize: 13, marginBottom: spacing.md },
+  avisoBtn: { backgroundColor: colors.neon, borderRadius: radius.pill, paddingVertical: spacing.sm + 2, alignItems: 'center' },
+  avisoBtnTxt: { fontFamily: fonts.bodyBold, color: colors.bg, fontSize: 14 },
+  avisoMsg: { fontFamily: fonts.bodyMedium, color: colors.green, fontSize: 13, marginTop: spacing.sm, textAlign: 'center' },
 
   pressed: { opacity: 0.85, transform: [{ scale: 0.99 }] },
 });
