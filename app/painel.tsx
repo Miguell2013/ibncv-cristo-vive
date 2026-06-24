@@ -45,6 +45,7 @@ export default function Painel() {
 
   const [modo, setModo] = useState<'equipe' | 'lider'>('equipe');
   const [ehGrupo, setEhGrupo] = useState(false);
+  const [vistoMs, setVistoMs] = useState(0);
   const [pushMsg, setPushMsg] = useState<string | null>(null);
   const [pushBusy, setPushBusy] = useState(false);
   const [depNome, setDepNome] = useState('');
@@ -98,6 +99,10 @@ export default function Painel() {
     if (grpRow) {
       const m = await supabase.rpc('painel_grupo_membros', { p_pin: p });
       setModo('lider'); setEhGrupo(true); setDepNome(grpRow.nome);
+      const vk = 'ibncv_grupo_visto_' + p;
+      const prev = Number(await AsyncStorage.getItem(vk)) || 0;
+      setVistoMs(prev);
+      await AsyncStorage.setItem(vk, String(Date.now()));
       setPessoas((m.data as Pessoa[]) ?? []);
       await AsyncStorage.setItem(PIN_KEY, p);
       setAuthed(true); setLoading(false);
@@ -160,6 +165,15 @@ export default function Painel() {
       </KeyboardAvoidingView>
     );
   }
+
+  // novos membros do grupo desde a última visita do líder
+  const novosGrupo = ehGrupo
+    ? pessoas.filter((p: any) => p.grupo_entrou_em && new Date(p.grupo_entrou_em).getTime() > vistoMs)
+    : [];
+  const novosIds = new Set(novosGrupo.map((p: any) => p.id));
+  const listaLider = ehGrupo
+    ? [...pessoas].sort((a: any, b: any) => (novosIds.has(b.id) ? 1 : 0) - (novosIds.has(a.id) ? 1 : 0))
+    : pessoas;
 
   // ---- PAINEL ----
   return (
@@ -246,15 +260,24 @@ export default function Painel() {
           </View>
         )}
 
+        {modo === 'lider' && ehGrupo && novosGrupo.length > 0 && (
+          <View style={styles.novosBanner}>
+            <Ionicons name="sparkles" size={16} color={colors.bg} />
+            <Text style={styles.novosTxt}>{novosGrupo.length} {novosGrupo.length === 1 ? 'pessoa entrou' : 'pessoas entraram'} desde sua última visita</Text>
+          </View>
+        )}
+
         {modo === 'lider' && (
-          pessoas.length === 0 ? <Text style={styles.empty}>Nenhum membro neste departamento ainda.</Text> :
-          pessoas.map((p) => {
+          listaLider.length === 0 ? <Text style={styles.empty}>Nenhum membro {ehGrupo ? 'neste grupo' : 'neste departamento'} ainda.</Text> :
+          listaLider.map((p) => {
             const t = TIPO_LABEL[p.tipo] || { txt: p.tipo, cor: colors.textMuted };
+            const novo = novosIds.has(p.id);
             return (
-              <View key={p.id} style={styles.card}>
+              <View key={p.id} style={[styles.card, novo && styles.cardNovo]}>
                 <View style={styles.cardHead}>
                   <Text style={styles.cardNome}>{p.nome_completo}</Text>
-                  <View style={[styles.badge, { borderColor: t.cor }]}><Text style={[styles.badgeTxt, { color: t.cor }]}>{t.txt}</Text></View>
+                  {novo ? <View style={[styles.badge, { borderColor: colors.neon, backgroundColor: colors.neon }]}><Text style={[styles.badgeTxt, { color: colors.bg }]}>NOVO</Text></View>
+                    : <View style={[styles.badge, { borderColor: t.cor }]}><Text style={[styles.badgeTxt, { color: t.cor }]}>{t.txt}</Text></View>}
                 </View>
                 {p.whatsapp ? <Text style={styles.linha}><Ionicons name="logo-whatsapp" size={13} color={colors.green} /> {p.whatsapp}</Text> : null}
                 {p.email ? <Text style={styles.linha}><Ionicons name="mail" size={13} color={colors.textFaint} /> {p.email}</Text> : null}
@@ -364,6 +387,9 @@ const styles = StyleSheet.create({
   avisoBtn: { backgroundColor: colors.neon, borderRadius: radius.pill, paddingVertical: spacing.sm + 2, alignItems: 'center' },
   avisoBtnTxt: { fontFamily: fonts.bodyBold, color: colors.bg, fontSize: 14 },
   avisoMsg: { fontFamily: fonts.bodyMedium, color: colors.green, fontSize: 13, marginTop: spacing.sm, textAlign: 'center' },
+  novosBanner: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: spacing.xs, backgroundColor: colors.neon, borderRadius: radius.pill, paddingVertical: spacing.sm, paddingHorizontal: spacing.md, marginBottom: spacing.md },
+  novosTxt: { fontFamily: fonts.bodyBold, color: colors.bg, fontSize: 13 },
+  cardNovo: { borderColor: colors.neon, ...shadow.float },
 
   pressed: { opacity: 0.85, transform: [{ scale: 0.99 }] },
 });
