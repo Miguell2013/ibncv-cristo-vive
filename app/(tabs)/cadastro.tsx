@@ -58,6 +58,13 @@ function isoNasc(s: string): string | null {
   return `${m[3]}-${m[2].padStart(2, '0')}-${m[1].padStart(2, '0')}`;
 }
 
+function mascararData(s: string): string {
+  const d = s.replace(/\D/g, '').slice(0, 8);
+  if (d.length > 4) return `${d.slice(0, 2)}/${d.slice(2, 4)}/${d.slice(4)}`;
+  if (d.length > 2) return `${d.slice(0, 2)}/${d.slice(2)}`;
+  return d;
+}
+
 export default function Cadastro() {
   const insets = useSafeAreaInsets();
   const router = useRouter();
@@ -92,6 +99,8 @@ export default function Cadastro() {
     if (whatsapp.trim().length < 8 && email.trim().length < 5) {
       setErro('Deixe um WhatsApp ou e-mail pra gente te acolher.'); return;
     }
+    if (!/^\d{2}\/\d{2}\/\d{4}$/.test(nascimento.trim())) { setErro('Informe a data de nascimento (DD/MM/AAAA).'); return; }
+    if (!sexo) { setErro('Selecione o sexo — é assim que te direcionamos ao grupo certo.'); return; }
     setLoading(true);
     try {
       const { error } = await supabase.from('pessoas').insert({
@@ -200,10 +209,10 @@ export default function Cadastro() {
           <Text style={styles.label}>E-mail</Text>
           <TextInput style={styles.input} value={email} onChangeText={setEmail} placeholder="seu@email.com" placeholderTextColor={colors.textFaint} keyboardType="email-address" autoCapitalize="none" />
 
-          <Text style={styles.label}>Data de nascimento</Text>
-          <TextInput style={styles.input} value={nascimento} onChangeText={setNascimento} placeholder="DD/MM/AAAA" placeholderTextColor={colors.textFaint} keyboardType="numbers-and-punctuation" maxLength={10} />
+          <Text style={styles.label}>Data de nascimento *</Text>
+          <TextInput style={styles.input} value={nascimento} onChangeText={(t) => setNascimento(mascararData(t))} placeholder="DD/MM/AAAA" placeholderTextColor={colors.textFaint} keyboardType="numbers-and-punctuation" maxLength={10} />
 
-          <Text style={styles.label}>Sexo</Text>
+          <Text style={styles.label}>Sexo *</Text>
           <View style={styles.sexoRow}>
             <Pressable style={[styles.sexoBtn, sexo === 'F' && styles.sexoOn]} onPress={() => setSexo('F')}>
               <Ionicons name="woman" size={18} color={sexo === 'F' ? colors.bg : colors.textMuted} />

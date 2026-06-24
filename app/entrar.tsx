@@ -42,10 +42,19 @@ export default function Entrar() {
     try { router.back(); } catch { router.replace('/(tabs)' as any); }
   }
 
+  function mascararData(s: string) {
+    const d = s.replace(/\D/g, '').slice(0, 8);
+    if (d.length > 4) return `${d.slice(0, 2)}/${d.slice(2, 4)}/${d.slice(4)}`;
+    if (d.length > 2) return `${d.slice(0, 2)}/${d.slice(2)}`;
+    return d;
+  }
+
   async function enviar() {
     setErro(null);
     if (nome.trim().length < 3) { setErro('Conte seu nome completo.'); return; }
     if (whatsapp.trim().length < 8) { setErro('Digite um WhatsApp válido.'); return; }
+    if (!/^\d{2}\/\d{2}\/\d{4}$/.test(nascimento.trim())) { setErro('Informe sua data de nascimento (DD/MM/AAAA).'); return; }
+    if (!sexo) { setErro('Selecione o sexo — é assim que te direcionamos ao seu grupo.'); return; }
     setLoading(true);
     const r = await identificar({ nome, whatsapp, email, nascimento, sexo, rua, numero, bairro, cidade });
     setLoading(false);
@@ -104,7 +113,7 @@ export default function Entrar() {
             <TextInput
               style={styles.input}
               value={nascimento}
-              onChangeText={setNascimento}
+              onChangeText={(t) => setNascimento(mascararData(t))}
               placeholder="Data de nascimento (DD/MM/AAAA)"
               placeholderTextColor={colors.textFaint}
               keyboardType="numbers-and-punctuation"
