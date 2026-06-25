@@ -58,6 +58,7 @@ export default function RootLayout() {
             <Stack.Screen name="ministerios" />
             <Stack.Screen name="contribuicao" />
             <Stack.Screen name="avisos" />
+            <Stack.Screen name="aovivo" />
           </Stack>
         </View>
       </IdentityProvider>

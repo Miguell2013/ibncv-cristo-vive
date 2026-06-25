@@ -130,7 +130,7 @@ export default function Home() {
             <Text style={styles.heroSub}>Uma família para pertencer.{'\n'}Uma missão para viver.</Text>
             <Pressable
               style={({ pressed }) => [styles.heroBtn, pressed && styles.pressed]}
-              onPress={() => router.push('/agenda' as any)}
+              onPress={() => router.push('/aovivo' as any)}
             >
               <Ionicons name="play" size={16} color={colors.bg} />
               <Text style={styles.heroBtnText}>ASSISTIR AO VIVO</Text>
