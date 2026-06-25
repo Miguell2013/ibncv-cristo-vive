@@ -173,11 +173,10 @@ export default function Home() {
             <View style={styles.palavraOverlay} />
             <View style={styles.palavraContent}>
               <Text style={styles.palavraKicker}>PALAVRA PASTORAL DO DIA</Text>
-              <Text style={styles.palavraTitulo}>{palavra.titulo}</Text>
-              <Text style={styles.palavraVerso}>“{palavra.versiculo_texto}”</Text>
+              <Text style={styles.palavraTitulo} numberOfLines={1}>{palavra.titulo}</Text>
+              <Text style={styles.palavraVerso} numberOfLines={4}>“{palavra.versiculo_texto}”</Text>
               <Text style={styles.palavraRef}>{palavra.versiculo_ref}</Text>
-              {palavra.mensagem ? <Text style={styles.palavraMsg}>{palavra.mensagem}</Text> : null}
-              <Text style={styles.palavraAssin}>— Pr. William Machado</Text>
+              {palavra.mensagem ? <Text style={styles.palavraMsg} numberOfLines={2}>{palavra.mensagem}</Text> : null}
             </View>
           </ImageBackground>
         )}
@@ -249,16 +248,15 @@ const styles = StyleSheet.create({
   checkinTitle: { fontFamily: fonts.bodySemi, color: colors.text, fontSize: 15 },
   checkinSub: { fontFamily: fonts.body, color: colors.textMuted, fontSize: 12, marginTop: 2 },
 
-  palavraCard: { marginTop: spacing.lg, borderRadius: radius.lg, overflow: 'hidden', borderWidth: 1, borderColor: colors.gold, backgroundColor: '#0a1018', minHeight: 230, justifyContent: 'center', ...shadow.glow },
+  palavraCard: { marginTop: spacing.lg, borderRadius: radius.lg, overflow: 'hidden', borderWidth: 1, borderColor: colors.gold, backgroundColor: '#0a1018', width: '100%', aspectRatio: 16 / 9, ...shadow.glow },
   palavraBg: { borderRadius: radius.lg },
-  palavraOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(5,9,15,0.35)' },
-  palavraContent: { padding: spacing.lg, paddingRight: '40%' },
-  palavraKicker: { fontFamily: fonts.bodySemi, color: colors.goldSoft, fontSize: 11, letterSpacing: 2 },
-  palavraTitulo: { fontFamily: fonts.displaySemi, color: colors.text, fontSize: 18, marginTop: 4 },
-  palavraVerso: { fontFamily: fonts.body, color: colors.text, fontSize: 14, fontStyle: 'italic', lineHeight: 21, marginTop: spacing.sm, textShadowColor: 'rgba(0,0,0,0.8)', textShadowRadius: 5 },
-  palavraRef: { fontFamily: fonts.bodyBold, color: colors.gold, fontSize: 12, marginTop: 4 },
-  palavraMsg: { fontFamily: fonts.body, color: colors.textMuted, fontSize: 13, lineHeight: 20, marginTop: spacing.sm },
-  palavraAssin: { fontFamily: fonts.bodySemi, color: colors.goldSoft, fontSize: 12, marginTop: spacing.md },
+  palavraOverlay: { position: 'absolute', left: 0, top: 0, bottom: 0, width: '60%', backgroundColor: 'rgba(5,9,15,0.42)' },
+  palavraContent: { position: 'absolute', left: 0, top: 0, bottom: 0, width: '60%', paddingHorizontal: spacing.md, justifyContent: 'center' },
+  palavraKicker: { fontFamily: fonts.bodySemi, color: colors.goldSoft, fontSize: 9, letterSpacing: 1.5 },
+  palavraTitulo: { fontFamily: fonts.displaySemi, color: colors.text, fontSize: 15, marginTop: 2 },
+  palavraVerso: { fontFamily: fonts.body, color: colors.text, fontSize: 11.5, fontStyle: 'italic', lineHeight: 16, marginTop: 5, textShadowColor: 'rgba(0,0,0,0.85)', textShadowRadius: 5 },
+  palavraRef: { fontFamily: fonts.bodyBold, color: colors.gold, fontSize: 10.5, marginTop: 3 },
+  palavraMsg: { fontFamily: fonts.body, color: colors.textMuted, fontSize: 10.5, lineHeight: 14, marginTop: 5 },
 
   hero: { minHeight: 230, marginTop: spacing.lg, backgroundColor: colors.surface, borderRadius: radius.lg, justifyContent: 'center', borderWidth: 1, borderColor: colors.gold, ...shadow.glow },
   heroOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(7,14,26,0.45)', borderRadius: radius.lg },
