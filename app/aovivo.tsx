@@ -68,6 +68,23 @@ export default function AoVivo() {
           </Pressable>
         )}
 
+        {embedUrl && canalId && Platform.OS === 'web' && (
+          <>
+            <Text style={styles.secTitle}>Últimos cultos</Text>
+            <View style={[styles.playerWrap, { width: playerW, height: playerH }]}>
+              {React.createElement('iframe', {
+                src: `https://www.youtube.com/embed/videoseries?list=UU${canalId.slice(2)}&rel=0`,
+                width: '100%',
+                height: '100%',
+                frameBorder: '0',
+                allow: 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share',
+                allowFullScreen: true,
+                style: { border: 'none', borderRadius: 14 },
+              })}
+            </View>
+          </>
+        )}
+
         <Pressable style={({ pressed }) => [styles.canalBtn, pressed && styles.pressed]} onPress={() => Linking.openURL(CANAL_URL)}>
           <Ionicons name="logo-youtube" size={18} color={colors.text} />
           <Text style={styles.canalBtnTxt}>Ver o canal e cultos anteriores</Text>
@@ -91,6 +108,7 @@ const styles = StyleSheet.create({
   sub: { fontFamily: fonts.body, color: colors.textMuted, fontSize: 13, textAlign: 'center', lineHeight: 20, marginTop: spacing.xs, marginBottom: spacing.lg },
 
   playerWrap: { backgroundColor: '#000', borderRadius: 14, overflow: 'hidden', borderWidth: 1, borderColor: colors.gold, ...shadow.glow },
+  secTitle: { fontFamily: fonts.displaySemi, color: colors.text, fontSize: 18, alignSelf: 'flex-start', marginTop: spacing.xl, marginBottom: spacing.sm },
 
   fallback: { width: '100%', backgroundColor: colors.surface, borderRadius: radius.lg, paddingVertical: spacing.xxl, alignItems: 'center', gap: spacing.sm, borderWidth: 1, borderColor: colors.border },
   fallbackTxt: { fontFamily: fonts.body, color: colors.textMuted, fontSize: 14, textAlign: 'center', paddingHorizontal: spacing.lg },
