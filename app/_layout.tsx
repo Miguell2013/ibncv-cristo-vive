@@ -17,6 +17,8 @@ import {
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { colors } from '../constants/theme';
 import { IdentityProvider } from '../contexts/identity';
+import { PushPrompt } from '../components/PushPrompt';
+import { InstallPrompt } from '../components/InstallPrompt';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
@@ -60,6 +62,8 @@ export default function RootLayout() {
             <Stack.Screen name="avisos" />
             <Stack.Screen name="aovivo" />
           </Stack>
+          <InstallPrompt />
+          <PushPrompt />
         </View>
       </IdentityProvider>
     </SafeAreaProvider>
