@@ -38,6 +38,7 @@ export default function Home() {
   const primeiroNome = identificado ? primeiroNomeDe(identidade?.nome) : null;
   const [orando, setOrando] = useState<number | null>(null);
   const [naoLidas, setNaoLidas] = useState(0);
+  const [palavra, setPalavra] = useState<any>(null);
 
   useEffect(() => {
     (async () => {
@@ -50,6 +51,12 @@ export default function Home() {
         const r = await supabase.rpc('contar_nao_lidas', { p_id: identidade.pessoaId });
         setNaoLidas((r.data as number) ?? 0);
       }
+      const hoje = new Date();
+      const inicioAno = new Date(hoje.getFullYear(), 0, 0);
+      const diaDoAno = Math.floor((hoje.getTime() - inicioAno.getTime()) / 86400000);
+      const diaPalavra = (diaDoAno % 100) + 1;
+      const { data: pal } = await supabase.from('palavra_dia').select('*').eq('dia', diaPalavra).maybeSingle();
+      setPalavra(pal);
     })();
   }, [identidade?.pessoaId]);
 
@@ -155,10 +162,25 @@ export default function Home() {
           ))}
         </View>
 
+        {/* PALAVRA PASTORAL DO DIA */}
+        {palavra && (
+          <View style={styles.palavraCard}>
+            <Image source={{ uri: img.pastor }} style={styles.palavraFoto} resizeMode="cover" />
+            <View style={styles.palavraFotoFade} />
+            <View style={styles.palavraContent}>
+              <Text style={styles.palavraKicker}>PALAVRA PASTORAL DO DIA</Text>
+              <Text style={styles.palavraTitulo}>{palavra.titulo}</Text>
+              <Text style={styles.palavraVerso}>“{palavra.versiculo_texto}”</Text>
+              <Text style={styles.palavraRef}>{palavra.versiculo_ref}</Text>
+              {palavra.mensagem ? <Text style={styles.palavraMsg}>{palavra.mensagem}</Text> : null}
+              <Text style={styles.palavraAssin}>— Pastor William Machado</Text>
+            </View>
+          </View>
+        )}
+
         {/* EDIFICAÇÃO */}
         <View style={styles.sectionRow}>
           <Text style={styles.sectionTitle}>Para sua edificação</Text>
-          <Text style={styles.sectionLink}>Ver todos</Text>
         </View>
         <View style={styles.edifRow}>
           {EDIFICACAO.map((e) => (
@@ -222,6 +244,17 @@ const styles = StyleSheet.create({
   },
   checkinTitle: { fontFamily: fonts.bodySemi, color: colors.text, fontSize: 15 },
   checkinSub: { fontFamily: fonts.body, color: colors.textMuted, fontSize: 12, marginTop: 2 },
+
+  palavraCard: { position: 'relative', marginTop: spacing.lg, borderRadius: radius.lg, overflow: 'hidden', borderWidth: 1, borderColor: colors.gold, backgroundColor: colors.surface, minHeight: 210, ...shadow.glow },
+  palavraFoto: { position: 'absolute', right: 0, top: 0, bottom: 0, width: '48%' },
+  palavraFotoFade: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(5,9,15,0.58)' },
+  palavraContent: { padding: spacing.lg, paddingRight: '34%' },
+  palavraKicker: { fontFamily: fonts.bodySemi, color: colors.goldSoft, fontSize: 11, letterSpacing: 2 },
+  palavraTitulo: { fontFamily: fonts.displaySemi, color: colors.text, fontSize: 18, marginTop: 4 },
+  palavraVerso: { fontFamily: fonts.body, color: colors.text, fontSize: 14, fontStyle: 'italic', lineHeight: 21, marginTop: spacing.sm, textShadowColor: 'rgba(0,0,0,0.8)', textShadowRadius: 5 },
+  palavraRef: { fontFamily: fonts.bodyBold, color: colors.gold, fontSize: 12, marginTop: 4 },
+  palavraMsg: { fontFamily: fonts.body, color: colors.textMuted, fontSize: 13, lineHeight: 20, marginTop: spacing.sm },
+  palavraAssin: { fontFamily: fonts.bodySemi, color: colors.goldSoft, fontSize: 12, marginTop: spacing.md },
 
   hero: { minHeight: 230, marginTop: spacing.lg, backgroundColor: colors.surface, borderRadius: radius.lg, justifyContent: 'center', borderWidth: 1, borderColor: colors.gold, ...shadow.glow },
   heroOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(7,14,26,0.45)', borderRadius: radius.lg },
