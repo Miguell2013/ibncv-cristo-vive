@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
   badge: { position: 'absolute', top: -4, right: -5, minWidth: 16, height: 16, borderRadius: 8, backgroundColor: colors.danger, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 3 },
   badgeTxt: { fontFamily: fonts.bodyBold, color: '#fff', fontSize: 10 },
   kicker: { fontFamily: fonts.bodySemi, color: colors.goldSoft, fontSize: 12, letterSpacing: 3, textAlign: 'center' },
-  brand: { fontFamily: fonts.display, color: colors.text, fontSize: 27, letterSpacing: 4, textAlign: 'center', marginTop: 0 },
+  brand: { fontFamily: fonts.display, color: colors.goldSoft, fontSize: 18, letterSpacing: 2, textAlign: 'center', marginTop: 1 },
 
   greetWrap: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: spacing.md, marginTop: spacing.md },
   greetRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, flex: 1, minWidth: 230 },
