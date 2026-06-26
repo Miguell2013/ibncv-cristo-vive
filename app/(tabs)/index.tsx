@@ -220,12 +220,12 @@ const styles = StyleSheet.create({
   body: { alignSelf: 'center', width: '100%', paddingHorizontal: spacing.md },
 
   header: { alignItems: 'center', justifyContent: 'center', position: 'relative' },
-  logo: { width: 215, height: 108, marginTop: -14, marginBottom: -22 },
+  logo: { width: 270, height: 135, marginTop: -22, marginBottom: -34 },
   bell: { position: 'absolute', right: 0, top: 14 },
   badge: { position: 'absolute', top: -4, right: -5, minWidth: 16, height: 16, borderRadius: 8, backgroundColor: colors.danger, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 3 },
   badgeTxt: { fontFamily: fonts.bodyBold, color: '#fff', fontSize: 10 },
-  kicker: { fontFamily: fonts.bodySemi, color: colors.goldSoft, fontSize: 12, letterSpacing: 3, textAlign: 'center' },
-  brand: { fontFamily: fonts.display, color: colors.goldSoft, fontSize: 18, letterSpacing: 2, textAlign: 'center', marginTop: 1 },
+  kicker: { fontFamily: fonts.bodySemi, color: colors.goldSoft, fontSize: 10, letterSpacing: 2.5, textAlign: 'center' },
+  brand: { fontFamily: fonts.display, color: colors.goldSoft, fontSize: 15, letterSpacing: 1.5, textAlign: 'center', marginTop: 1 },
 
   greetWrap: { flexDirection: 'row', flexWrap: 'wrap', alignItems: 'center', gap: spacing.md, marginTop: spacing.md },
   greetRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, flex: 1, minWidth: 230 },
