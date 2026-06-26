@@ -65,6 +65,16 @@ function configurarMetaWeb() {
   };
   setLink('apple-touch-icon', '/icon-app.png');
   setLink('apple-touch-icon', '/icon-app.png', '180x180');
+  // Manifest PWA (instalação direta no Android)
+  {
+    let m = document.querySelector('link[rel="manifest"]') as HTMLLinkElement | null;
+    if (!m) {
+      m = document.createElement('link');
+      m.setAttribute('rel', 'manifest');
+      document.head.appendChild(m);
+    }
+    m.setAttribute('href', '/manifest.json');
+  }
   try {
     document.documentElement.style.backgroundColor = '#05090F';
     document.body.style.backgroundColor = '#05090F';
