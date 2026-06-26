@@ -51,6 +51,20 @@ function configurarMetaWeb() {
     'content',
     'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover'
   );
+  // Ícone da tela inicial (apple-touch-icon)
+  const setLink = (rel: string, href: string, sizes?: string) => {
+    const sel = sizes ? `link[rel="${rel}"][sizes="${sizes}"]` : `link[rel="${rel}"]`;
+    let el = document.querySelector(sel) as HTMLLinkElement | null;
+    if (!el) {
+      el = document.createElement('link');
+      el.setAttribute('rel', rel);
+      if (sizes) el.setAttribute('sizes', sizes);
+      document.head.appendChild(el);
+    }
+    el.setAttribute('href', href);
+  };
+  setLink('apple-touch-icon', '/icon-app.png');
+  setLink('apple-touch-icon', '/icon-app.png', '180x180');
   try {
     document.documentElement.style.backgroundColor = '#05090F';
     document.body.style.backgroundColor = '#05090F';

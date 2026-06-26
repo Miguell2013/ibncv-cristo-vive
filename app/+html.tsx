@@ -22,6 +22,11 @@ export default function Root({ children }: PropsWithChildren) {
         <meta name="apple-mobile-web-app-title" content="Cristo Vive" />
         <meta name="theme-color" content="#05090F" />
 
+        {/* Ícone da tela inicial (iPhone/Android) */}
+        <link rel="apple-touch-icon" href="/icon-app.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="/icon-app.png" />
+        <link rel="icon" type="image/png" href="/icon-app.png" />
+
         <ScrollViewStyleReset />
 
         {/* Fundo escuro desde o primeiro instante (antes do React montar) */}
