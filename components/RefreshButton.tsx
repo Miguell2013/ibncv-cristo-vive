@@ -22,12 +22,12 @@ export function RefreshButton() {
 
 const styles = StyleSheet.create({
   btn: {
-    position: 'absolute',
+    position: 'fixed' as any, // web: gruda no topo da tela (não rola junto com o conteúdo)
     left: 16,
     width: 30,
     height: 30,
     alignItems: 'center',
     justifyContent: 'center',
-    zIndex: 50,
+    zIndex: 9999,
   },
 });
