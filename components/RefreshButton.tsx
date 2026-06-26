@@ -1,10 +1,11 @@
 import React from 'react';
-import { Platform, Pressable, StyleSheet } from 'react-native';
+import { Platform } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors } from '../constants/theme';
 
-// Botão flutuante de "atualizar" — recarrega o app. Aparece em todas as abas (web/PWA).
+// Botão "atualizar" — só web. Renderiza um <div> HTML puro com position: fixed,
+// pra grudar no topo de verdade (não rola junto com o conteúdo).
 export function RefreshButton() {
   const insets = useSafeAreaInsets();
   if (Platform.OS !== 'web') return null;
@@ -13,21 +14,25 @@ export function RefreshButton() {
     try { (window as any).location.reload(); } catch {}
   };
 
-  return (
-    <Pressable onPress={onPress} hitSlop={10} style={[styles.btn, { top: insets.top + 30 }]} accessibilityLabel="Atualizar">
-      <Ionicons name="refresh" size={24} color={colors.gold} />
-    </Pressable>
+  return React.createElement(
+    'div',
+    {
+      onClick: onPress,
+      title: 'Atualizar',
+      'aria-label': 'Atualizar',
+      style: {
+        position: 'fixed',
+        top: (insets.top || 0) + 30,
+        left: 16,
+        width: 34,
+        height: 34,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        cursor: 'pointer',
+        zIndex: 99999,
+      },
+    },
+    React.createElement(Ionicons as any, { name: 'refresh', size: 24, color: colors.gold })
   );
 }
-
-const styles = StyleSheet.create({
-  btn: {
-    position: 'fixed' as any, // web: gruda no topo da tela (não rola junto com o conteúdo)
-    left: 16,
-    width: 30,
-    height: 30,
-    alignItems: 'center',
-    justifyContent: 'center',
-    zIndex: 9999,
-  },
-});
