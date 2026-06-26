@@ -19,6 +19,7 @@ import { colors } from '../constants/theme';
 import { IdentityProvider } from '../contexts/identity';
 import { PushPrompt } from '../components/PushPrompt';
 import { InstallPrompt } from '../components/InstallPrompt';
+import { playTap } from '../services/sfx';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
@@ -81,6 +82,33 @@ function configurarMetaWeb() {
   } catch {}
 }
 configurarMetaWeb();
+
+// Efeito sonoro de toque: toca um clique suave ao tocar em elementos clicáveis (botões, links).
+function ativarSomDeToque() {
+  if (Platform.OS !== 'web' || typeof document === 'undefined') return;
+  if ((window as any).__ibncvSomLigado) return;
+  (window as any).__ibncvSomLigado = true;
+  document.addEventListener(
+    'pointerdown',
+    (e: any) => {
+      try {
+        const alvo = e.target as Element | null;
+        if (!alvo || !alvo.closest) return;
+        // só toca em elementos "clicáveis" (cursor pointer = botão/link/pressable)
+        let el: Element | null = alvo;
+        let clicavel = false;
+        for (let i = 0; el && i < 6; i++) {
+          const cur = getComputedStyle(el as Element).cursor;
+          if (cur === 'pointer') { clicavel = true; break; }
+          el = (el as Element).parentElement;
+        }
+        if (clicavel) playTap();
+      } catch {}
+    },
+    { passive: true } as any
+  );
+}
+ativarSomDeToque();
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
