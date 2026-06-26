@@ -63,8 +63,8 @@ function configurarMetaWeb() {
     }
     el.setAttribute('href', href);
   };
-  setLink('apple-touch-icon', '/icon-app.png');
-  setLink('apple-touch-icon', '/icon-app.png', '180x180');
+  setLink('apple-touch-icon', 'https://ibncv.b-cdn.net/logo.png.png');
+  setLink('apple-touch-icon', 'https://ibncv.b-cdn.net/logo.png.png', '180x180');
   // Manifest PWA (instalação direta no Android)
   {
     let m = document.querySelector('link[rel="manifest"]') as HTMLLinkElement | null;

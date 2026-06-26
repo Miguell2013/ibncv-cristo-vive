@@ -25,10 +25,10 @@ export default function Root({ children }: PropsWithChildren) {
         {/* Manifest PWA — habilita instalação direta no Android */}
         <link rel="manifest" href="/manifest.json" />
 
-        {/* Ícone da tela inicial (iPhone/Android) */}
-        <link rel="apple-touch-icon" href="/icon-app.png" />
-        <link rel="apple-touch-icon" sizes="180x180" href="/icon-app.png" />
-        <link rel="icon" type="image/png" href="/icon-app.png" />
+        {/* Ícone da tela inicial (iPhone/Android) — logo da igreja */}
+        <link rel="apple-touch-icon" href="https://ibncv.b-cdn.net/logo.png.png" />
+        <link rel="apple-touch-icon" sizes="180x180" href="https://ibncv.b-cdn.net/logo.png.png" />
+        <link rel="icon" type="image/png" href="https://ibncv.b-cdn.net/logo.png.png" />
 
         <ScrollViewStyleReset />
 
