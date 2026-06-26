@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
 import * as SplashScreen from 'expo-splash-screen';
-import { View } from 'react-native';
+import { Platform, View } from 'react-native';
 import {
   useFonts,
   Cinzel_600SemiBold,
@@ -21,6 +21,42 @@ import { PushPrompt } from '../components/PushPrompt';
 import { InstallPrompt } from '../components/InstallPrompt';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
+
+// Garante, em qualquer modo de build, que o iPhone use barra de status escura/transparente
+// (sem faixa branca) e o app abra em tela cheia ao ser adicionado à tela inicial.
+function configurarMetaWeb() {
+  if (Platform.OS !== 'web' || typeof document === 'undefined') return;
+  const setMeta = (name: string, content: string) => {
+    let el = document.querySelector(`meta[name="${name}"]`) as HTMLMetaElement | null;
+    if (!el) {
+      el = document.createElement('meta');
+      el.setAttribute('name', name);
+      document.head.appendChild(el);
+    }
+    el.setAttribute('content', content);
+  };
+  setMeta('apple-mobile-web-app-capable', 'yes');
+  setMeta('mobile-web-app-capable', 'yes');
+  setMeta('apple-mobile-web-app-status-bar-style', 'black-translucent');
+  setMeta('apple-mobile-web-app-title', 'Cristo Vive');
+  setMeta('theme-color', '#05090F');
+  // viewport com viewport-fit=cover (necessário para a área segura do notch)
+  let vp = document.querySelector('meta[name="viewport"]') as HTMLMetaElement | null;
+  if (!vp) {
+    vp = document.createElement('meta');
+    vp.setAttribute('name', 'viewport');
+    document.head.appendChild(vp);
+  }
+  vp.setAttribute(
+    'content',
+    'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover'
+  );
+  try {
+    document.documentElement.style.backgroundColor = '#05090F';
+    document.body.style.backgroundColor = '#05090F';
+  } catch {}
+}
+configurarMetaWeb();
 
 export default function RootLayout() {
   const [fontsLoaded] = useFonts({
