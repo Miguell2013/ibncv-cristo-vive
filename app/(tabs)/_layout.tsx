@@ -1,8 +1,9 @@
 import { Tabs } from 'expo-router';
-import { Platform } from 'react-native';
+import { Platform, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors, fonts } from '../../constants/theme';
+import { RefreshButton } from '../../components/RefreshButton';
 
 export default function TabsLayout() {
   const insets = useSafeAreaInsets();
@@ -10,6 +11,7 @@ export default function TabsLayout() {
   const bottomPad = Platform.OS === 'web' ? 28 : insets.bottom + 10;
   const barHeight = Platform.OS === 'web' ? 92 : 64 + insets.bottom;
   return (
+    <View style={{ flex: 1 }}>
     <Tabs
       screenOptions={{
         headerShown: false,
@@ -77,5 +79,7 @@ export default function TabsLayout() {
         }}
       />
     </Tabs>
+    <RefreshButton />
+    </View>
   );
 }
