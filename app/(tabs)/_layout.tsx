@@ -3,7 +3,6 @@ import { Platform, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { colors, fonts } from '../../constants/theme';
-import { RefreshButton } from '../../components/RefreshButton';
 
 export default function TabsLayout() {
   const insets = useSafeAreaInsets();
@@ -79,7 +78,6 @@ export default function TabsLayout() {
         }}
       />
     </Tabs>
-    <RefreshButton />
     </View>
   );
 }

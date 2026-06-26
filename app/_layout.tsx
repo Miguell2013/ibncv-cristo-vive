@@ -19,6 +19,7 @@ import { colors } from '../constants/theme';
 import { IdentityProvider } from '../contexts/identity';
 import { PushPrompt } from '../components/PushPrompt';
 import { InstallPrompt } from '../components/InstallPrompt';
+import { RefreshButton } from '../components/RefreshButton';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
@@ -123,6 +124,7 @@ export default function RootLayout() {
             <Stack.Screen name="aovivo" />
             <Stack.Screen name="estudos" />
           </Stack>
+          <RefreshButton />
           <InstallPrompt />
           <PushPrompt />
         </View>
