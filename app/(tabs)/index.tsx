@@ -291,8 +291,8 @@ const styles = StyleSheet.create({
   sectionTitle: { fontFamily: fonts.displaySemi, color: colors.text, fontSize: 20 },
   sectionLink: { fontFamily: fonts.bodySemi, color: colors.gold, fontSize: 13 },
 
-  edifRow: { flexDirection: 'row', gap: spacing.md },
-  edifCard: { flex: 1, height: 220, borderRadius: radius.md, overflow: 'hidden', backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.gold, ...shadow.glow },
+  edifRow: { gap: spacing.md },
+  edifCard: { width: '100%', aspectRatio: 16 / 9, borderRadius: radius.md, overflow: 'hidden', backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.gold, ...shadow.glow },
   edifImg: { ...StyleSheet.absoluteFillObject, width: '100%', height: '100%' },
   edifOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(7,14,26,0.35)' },
   edifTagWrap: { position: 'absolute', top: spacing.sm, left: spacing.sm, backgroundColor: 'rgba(47,179,122,0.85)', borderRadius: radius.sm, paddingHorizontal: spacing.sm, paddingVertical: 3 },

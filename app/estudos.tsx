@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
   topTitle: { fontFamily: fonts.displaySemi, color: colors.text, fontSize: 17, flex: 1, textAlign: 'center', marginHorizontal: spacing.sm },
 
   sec: { fontFamily: fonts.displaySemi, color: colors.text, fontSize: 18, alignSelf: 'flex-start', marginBottom: spacing.sm, marginTop: spacing.xs },
-  card: { width: '100%', height: 130, borderRadius: radius.lg, overflow: 'hidden', borderWidth: 1, borderColor: colors.gold, backgroundColor: colors.surface, marginBottom: spacing.md, justifyContent: 'flex-end', ...shadow.float },
+  card: { width: '100%', aspectRatio: 16 / 9, borderRadius: radius.lg, overflow: 'hidden', borderWidth: 1, borderColor: colors.gold, backgroundColor: colors.surface, marginBottom: spacing.md, justifyContent: 'flex-end', ...shadow.float },
   cardImg: { ...StyleSheet.absoluteFillObject, width: '100%', height: '100%' },
   cardOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(5,9,15,0.45)' },
   cardTagWrap: { position: 'absolute', top: spacing.sm, left: spacing.sm, backgroundColor: colors.gold, borderRadius: radius.sm, paddingHorizontal: spacing.sm, paddingVertical: 2 },
