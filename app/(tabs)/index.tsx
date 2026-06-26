@@ -293,7 +293,7 @@ const styles = StyleSheet.create({
 
   edifRow: { flexDirection: 'row', gap: spacing.md },
   edifCard: { flex: 1, height: 220, borderRadius: radius.md, overflow: 'hidden', backgroundColor: colors.surface, borderWidth: 1, borderColor: colors.gold, ...shadow.glow },
-  edifImg: { position: 'absolute', top: 0, left: 0, width: '100%', aspectRatio: 0.8 },
+  edifImg: { ...StyleSheet.absoluteFillObject, width: '100%', height: '100%' },
   edifOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(7,14,26,0.35)' },
   edifTagWrap: { position: 'absolute', top: spacing.sm, left: spacing.sm, backgroundColor: 'rgba(47,179,122,0.85)', borderRadius: radius.sm, paddingHorizontal: spacing.sm, paddingVertical: 3 },
   edifTag: { fontFamily: fonts.bodyBold, color: colors.white, fontSize: 10, letterSpacing: 1 },
