@@ -14,7 +14,7 @@ export function RefreshButton() {
   };
 
   return (
-    <Pressable onPress={onPress} hitSlop={10} style={[styles.btn, { top: insets.top + 14 }]} accessibilityLabel="Atualizar">
+    <Pressable onPress={onPress} hitSlop={10} style={[styles.btn, { top: insets.top + 30 }]} accessibilityLabel="Atualizar">
       <Ionicons name="refresh" size={24} color={colors.gold} />
     </Pressable>
   );
