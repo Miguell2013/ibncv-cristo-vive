@@ -23,10 +23,6 @@ const ATALHOS = [
   { icon: 'logo-usd', label: 'Contribuir', desc: 'Seja um mantenedor', route: '/contribuicao', color: colors.gold },
 ] as const;
 
-const EDIFICACAO = [
-  { tag: 'SÉRIE', titulo: 'Reino ou Império', sub: 'Pastor William Machado', img: img.edif1 },
-  { tag: 'DEVOCIONAL', titulo: '21 Dias de Oração', sub: 'Transforme sua rotina e fortaleça sua fé', img: img.edif2 },
-];
 
 export default function Home() {
   const insets = useSafeAreaInsets();
@@ -39,6 +35,7 @@ export default function Home() {
   const [orando, setOrando] = useState<number | null>(null);
   const [naoLidas, setNaoLidas] = useState(0);
   const [palavra, setPalavra] = useState<any>(null);
+  const [estudosAtuais, setEstudosAtuais] = useState<any[]>([]);
 
   useEffect(() => {
     (async () => {
@@ -57,6 +54,8 @@ export default function Home() {
       const diaPalavra = (diaDoAno % 100) + 1;
       const { data: pal } = await supabase.from('palavra_dia').select('*').eq('dia', diaPalavra).maybeSingle();
       setPalavra(pal);
+      const { data: est } = await supabase.from('estudos').select('*').eq('atual', true).order('ordem');
+      setEstudosAtuais((est as any[]) ?? []);
     })();
   }, [identidade?.pessoaId]);
 
@@ -186,23 +185,29 @@ export default function Home() {
           <Text style={styles.sectionTitle}>Para sua edificação</Text>
         </View>
         <View style={styles.edifRow}>
-          {EDIFICACAO.map((e) => (
-            <View key={e.titulo} style={styles.edifCard}>
-              <Image source={{ uri: e.img }} style={styles.edifImg} resizeMode="cover" />
+          {estudosAtuais.length === 0 ? (
+            <Text style={styles.edifVazio}>Em breve, novos estudos por aqui. 🤍</Text>
+          ) : estudosAtuais.map((e) => (
+            <Pressable key={e.id} style={({ pressed }) => [styles.edifCard, pressed && styles.pressed]} onPress={() => router.push({ pathname: '/estudos', params: { url: e.url, titulo: e.titulo } } as any)}>
+              {e.imagem ? <Image source={{ uri: e.imagem }} style={styles.edifImg} resizeMode="cover" /> : null}
               <View style={styles.edifOverlay} />
               <View style={styles.edifTagWrap}>
                 <Text style={styles.edifTag}>{e.tag}</Text>
               </View>
               <View style={styles.edifText}>
                 <Text style={styles.edifTitle}>{e.titulo}</Text>
-                <Text style={styles.edifSub}>{e.sub}</Text>
+                {e.descricao ? <Text style={styles.edifSub}>{e.descricao}</Text> : null}
               </View>
               <View style={styles.edifPlay}>
-                <Ionicons name="play" size={16} color={colors.gold} />
+                <Ionicons name="book" size={16} color={colors.gold} />
               </View>
-            </View>
+            </Pressable>
           ))}
         </View>
+        <Pressable style={({ pressed }) => [styles.verTodos, pressed && styles.pressed]} onPress={() => router.push('/estudos' as any)}>
+          <Text style={styles.verTodosTxt}>Ver todos os estudos</Text>
+          <Ionicons name="arrow-forward" size={15} color={colors.gold} />
+        </Pressable>
 
         <Text style={styles.footer}>Igreja Batista Nacional Cristo Vive</Text>
       </View>
@@ -298,6 +303,10 @@ const styles = StyleSheet.create({
   edifPlay: { position: 'absolute', bottom: spacing.md, right: spacing.md, width: 34, height: 34, borderRadius: 17, backgroundColor: colors.surface, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: colors.gold },
 
   footer: { fontFamily: fonts.body, color: colors.textFaint, fontSize: 12, textAlign: 'center', marginTop: spacing.xxl },
+
+  edifVazio: { fontFamily: fonts.body, color: colors.textFaint, fontSize: 14, paddingVertical: spacing.lg },
+  verTodos: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 6, marginTop: spacing.sm },
+  verTodosTxt: { fontFamily: fonts.bodySemi, color: colors.gold, fontSize: 14 },
 
   pressed: { opacity: 0.85, transform: [{ scale: 0.99 }] },
 });

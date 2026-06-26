@@ -16,6 +16,7 @@ import { useIdentity } from '../../contexts/identity';
 const ITENS: { icon: string; label: string; desc: string; rota?: string }[] = [
   { icon: 'book', label: 'Quem somos', desc: 'Nossa história, visão e valores' },
   { icon: 'people', label: 'Ministérios', desc: 'Encontre seu lugar pra servir', rota: '/ministerios' },
+  { icon: 'library', label: 'Estudos', desc: 'Panorama de Romanos e mais', rota: '/estudos' },
   { icon: 'cash', label: 'Contribuição', desc: 'Dízimos e ofertas com fé', rota: '/contribuicao' },
   { icon: 'location', label: 'Onde estamos', desc: 'Endereço e como chegar' },
 ];
