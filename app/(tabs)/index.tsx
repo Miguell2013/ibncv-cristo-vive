@@ -270,15 +270,15 @@ const styles = StyleSheet.create({
   palavraRef: { fontFamily: fonts.bodyBold, color: colors.gold, fontSize: 10.5, marginTop: 3 },
   palavraMsg: { fontFamily: fonts.body, color: colors.textMuted, fontSize: 10.5, lineHeight: 14, marginTop: 5 },
 
-  hero: { minHeight: 230, marginTop: spacing.lg, backgroundColor: colors.surface, borderRadius: radius.lg, justifyContent: 'center', borderWidth: 1, borderColor: colors.gold, ...shadow.glow },
+  hero: { width: '100%', aspectRatio: 16 / 9, marginTop: spacing.lg, backgroundColor: colors.surface, borderRadius: radius.lg, overflow: 'hidden', justifyContent: 'center', borderWidth: 1, borderColor: colors.gold, ...shadow.glow },
   heroOverlay: { ...StyleSheet.absoluteFillObject, backgroundColor: 'rgba(7,14,26,0.45)', borderRadius: radius.lg },
-  heroContent: { padding: spacing.lg },
-  heroKicker: { fontFamily: fonts.bodySemi, color: colors.goldSoft, fontSize: 12, letterSpacing: 3 },
-  heroTitle: { fontFamily: fonts.display, color: colors.gold, fontSize: 44, lineHeight: 46, marginTop: spacing.xs },
-  heroSub: { fontFamily: fonts.body, color: colors.text, fontSize: 15, lineHeight: 22, marginTop: spacing.sm },
+  heroContent: { padding: spacing.md },
+  heroKicker: { fontFamily: fonts.bodySemi, color: colors.goldSoft, fontSize: 10, letterSpacing: 2.5 },
+  heroTitle: { fontFamily: fonts.display, color: colors.gold, fontSize: 32, lineHeight: 34, marginTop: 2 },
+  heroSub: { fontFamily: fonts.body, color: colors.text, fontSize: 12.5, lineHeight: 17, marginTop: spacing.xs },
   heroBtn: {
     flexDirection: 'row', alignItems: 'center', gap: 8, alignSelf: 'flex-start', backgroundColor: colors.gold,
-    borderRadius: radius.pill, paddingVertical: spacing.sm + 2, paddingHorizontal: spacing.lg, marginTop: spacing.lg,
+    borderRadius: radius.pill, paddingVertical: spacing.sm, paddingHorizontal: spacing.lg, marginTop: spacing.sm,
   },
   heroBtnText: { fontFamily: fonts.bodyBold, color: colors.bg, fontSize: 13, letterSpacing: 1 },
 
