@@ -7,6 +7,7 @@ import {
   ImageBackground,
   Image,
   Pressable,
+  Platform,
   useWindowDimensions,
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -65,9 +66,14 @@ export default function Home() {
       contentContainerStyle={{ paddingBottom: spacing.xxl }}
       showsVerticalScrollIndicator={false}
     >
-      <View style={[styles.body, { maxWidth: maxW, paddingTop: insets.top + spacing.xs }]}>
+      <View style={[styles.body, { maxWidth: maxW, paddingTop: Math.max(insets.top, spacing.sm) }]}>
         {/* TOPO: logo grande ao lado do nome + sino */}
         <View style={styles.header}>
+          {Platform.OS === 'web' && (
+            <Pressable style={styles.refresh} hitSlop={12} onPress={() => { try { (window as any).location.reload(); } catch {} }}>
+              <Ionicons name="refresh" size={24} color={colors.gold} />
+            </Pressable>
+          )}
           <Image source={{ uri: img.logo }} style={styles.logo} resizeMode="contain" />
           <Pressable style={styles.bell} hitSlop={12} onPress={() => router.push('/avisos' as any)}>
             <Ionicons name="notifications-outline" size={24} color={colors.gold} />
@@ -222,6 +228,7 @@ const styles = StyleSheet.create({
   header: { alignItems: 'center', justifyContent: 'center', position: 'relative' },
   logo: { width: 270, height: 135, marginTop: -22, marginBottom: -34 },
   bell: { position: 'absolute', right: 0, top: 14 },
+  refresh: { position: 'absolute', left: 0, top: 14 },
   badge: { position: 'absolute', top: -4, right: -5, minWidth: 16, height: 16, borderRadius: 8, backgroundColor: colors.danger, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 3 },
   badgeTxt: { fontFamily: fonts.bodyBold, color: '#fff', fontSize: 10 },
   kicker: { fontFamily: fonts.bodySemi, color: colors.goldSoft, fontSize: 10, letterSpacing: 2.5, textAlign: 'center' },

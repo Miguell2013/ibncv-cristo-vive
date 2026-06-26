@@ -19,7 +19,6 @@ import { colors } from '../constants/theme';
 import { IdentityProvider } from '../contexts/identity';
 import { PushPrompt } from '../components/PushPrompt';
 import { InstallPrompt } from '../components/InstallPrompt';
-import { RefreshButton } from '../components/RefreshButton';
 
 SplashScreen.preventAutoHideAsync().catch(() => {});
 
@@ -38,7 +37,7 @@ function configurarMetaWeb() {
   };
   setMeta('apple-mobile-web-app-capable', 'yes');
   setMeta('mobile-web-app-capable', 'yes');
-  setMeta('apple-mobile-web-app-status-bar-style', 'black-translucent');
+  setMeta('apple-mobile-web-app-status-bar-style', 'black');
   setMeta('apple-mobile-web-app-title', 'Cristo Vive');
   setMeta('theme-color', '#05090F');
   // viewport com viewport-fit=cover (necessário para a área segura do notch)
@@ -124,7 +123,6 @@ export default function RootLayout() {
             <Stack.Screen name="aovivo" />
             <Stack.Screen name="estudos" />
           </Stack>
-          <RefreshButton />
           <InstallPrompt />
           <PushPrompt />
         </View>
