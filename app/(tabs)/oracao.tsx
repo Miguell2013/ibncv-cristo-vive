@@ -149,7 +149,7 @@ export default function Oracao() {
         keyboardShouldPersistTaps="handled"
       >
         <View style={[styles.body, { maxWidth: maxW }]}>
-          <HeaderRefresh top={4} />
+          <HeaderRefresh top={14} />
           {/* CABEÇALHO */}
           <View style={styles.headerWrap}>
             <Image source={{ uri: img.logo }} style={styles.logo} resizeMode="contain" />

@@ -32,11 +32,11 @@ export default function Mais() {
   return (
     <ScrollView
       style={styles.root}
-      contentContainerStyle={{ paddingTop: insets.top + spacing.lg, paddingBottom: spacing.xxl, alignItems: 'center' }}
+      contentContainerStyle={{ paddingTop: Math.max(insets.top, spacing.sm), paddingBottom: spacing.xxl, alignItems: 'center' }}
       showsVerticalScrollIndicator={false}
     >
       <View style={[styles.body, { maxWidth: maxW }]}>
-        <HeaderRefresh top={4} align="right" />
+        <HeaderRefresh top={14} align="right" />
         <View style={styles.brandRow}>
           <Image source={{ uri: img.logo }} style={styles.logo} resizeMode="contain" />
           <View>

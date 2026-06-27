@@ -44,14 +44,14 @@ export default function Agenda() {
   return (
     <ScrollView
       style={styles.root}
-      contentContainerStyle={{ paddingTop: insets.top + spacing.lg, paddingBottom: spacing.xxl, alignItems: 'center' }}
+      contentContainerStyle={{ paddingTop: Math.max(insets.top, spacing.sm), paddingBottom: spacing.xxl, alignItems: 'center' }}
       showsVerticalScrollIndicator={false}
       refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={() => { setRefreshing(true); carregar(); }} tintColor={colors.gold} />
       }
     >
       <View style={[styles.body, { maxWidth: maxW }]}>
-        <HeaderRefresh top={4} />
+        <HeaderRefresh top={14} />
         <Image source={{ uri: img.logo }} style={styles.logo} resizeMode="contain" />
         <Text style={styles.title}>AGENDA</Text>
         <View style={styles.goldLine} />

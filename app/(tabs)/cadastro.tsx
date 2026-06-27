@@ -154,7 +154,7 @@ export default function Cadastro() {
       <ScrollView style={styles.root} contentContainerStyle={{ paddingBottom: spacing.xxl }} showsVerticalScrollIndicator={false}>
         <ImageBackground source={{ uri: img.acolhida }} style={[styles.hero, { paddingTop: insets.top + spacing.lg }]} imageStyle={styles.heroImg}>
           <View style={styles.heroOverlay} />
-          <HeaderRefresh top={insets.top + 4} />
+          <HeaderRefresh top={insets.top + 14} />
           <View style={[styles.heroContent, { maxWidth: maxW }]}>
             <Text style={styles.kicker}>ACOLHIMENTO</Text>
             <Text style={styles.title}>Seja bem-vindo</Text>
@@ -187,12 +187,12 @@ export default function Cadastro() {
   return (
     <KeyboardAvoidingView style={styles.root} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
       <ScrollView
-        contentContainerStyle={{ paddingTop: insets.top + spacing.lg, paddingBottom: spacing.xxl, alignItems: 'center' }}
+        contentContainerStyle={{ paddingTop: Math.max(insets.top, spacing.sm), paddingBottom: spacing.xxl, alignItems: 'center' }}
         showsVerticalScrollIndicator={false}
         keyboardShouldPersistTaps="handled"
       >
         <View style={[styles.body, { maxWidth: maxW }]}>
-          <HeaderRefresh top={4} align="right" />
+          <HeaderRefresh top={14} align="right" />
           <Pressable style={styles.voltar} onPress={() => setEtapa('escolha')} hitSlop={10}>
             <Ionicons name="chevron-back" size={24} color={colors.text} />
             <Text style={styles.voltarTxt}>Voltar</Text>
