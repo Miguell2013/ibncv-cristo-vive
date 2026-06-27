@@ -158,7 +158,7 @@ export default function Oracao() {
           {/* BANNER PROVA SOCIAL (número real) */}
           <View style={styles.proofCard}>
             <View style={styles.proofIcon}>
-              <Text style={styles.proofEmoji}>🙏</Text>
+              <Ionicons name="flame" size={24} color={colors.gold} />
             </View>
             <View style={{ flex: 1 }}>
               {totalOrando > 0 ? (
@@ -249,7 +249,7 @@ export default function Oracao() {
             >
               {loading ? <ActivityIndicator color={colors.bg} /> : (
                 <>
-                  <Text style={styles.btnEmoji}>🙏</Text>
+                  <Ionicons name="paper-plane" size={16} color={colors.bg} />
                   <Text style={styles.btnText}>ENVIAR PEDIDO</Text>
                 </>
               )}
