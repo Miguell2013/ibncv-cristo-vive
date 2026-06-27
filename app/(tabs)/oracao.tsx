@@ -20,13 +20,21 @@ import { colors, fonts, radius, spacing, shadow, img } from '../../constants/the
 import { supabase, PedidoOracao } from '../../services/supabase';
 import { useIdentity } from '../../contexts/identity';
 
-const AREAS: { label: string; value: string; icon: string }[] = [
-  { label: 'Família', value: 'familia', icon: 'people' },
-  { label: 'Saúde', value: 'saude', icon: 'medkit' },
-  { label: 'Finanças', value: 'financas', icon: 'cash' },
-  { label: 'Espiritual', value: 'espiritual', icon: 'leaf' },
-  { label: 'Outro', value: 'outro', icon: 'ellipsis-horizontal' },
+const AREAS: { label: string; value: string; on: string; off: string }[] = [
+  { label: 'Família', value: 'familia', on: 'people', off: 'people-outline' },
+  { label: 'Saúde', value: 'saude', on: 'medkit', off: 'medkit-outline' },
+  { label: 'Finanças', value: 'financas', on: 'cash', off: 'cash-outline' },
+  { label: 'Espiritual', value: 'espiritual', on: 'leaf', off: 'leaf-outline' },
+  { label: 'Outro', value: 'outro', on: 'ellipsis-horizontal-circle', off: 'ellipsis-horizontal-circle-outline' },
 ];
+
+// Paleta premium (mais escura e sóbria que o azul padrão), só nesta tela.
+const PREMIUM = {
+  card: '#0F1E36',        // azul escuro nítido, leve contraste com o fundo preto
+  tile: '#0B1626',        // tampetes / inputs um pouco mais escuros
+  hair: 'rgba(212,175,55,0.22)', // fio dourado sutil
+  hairSoft: 'rgba(255,255,255,0.07)',
+};
 
 const LIMITE = 500;
 
@@ -180,7 +188,7 @@ export default function Oracao() {
                 const active = area === a.value;
                 return (
                   <Pressable key={a.value} style={[styles.tile, active && styles.tileActive]} onPress={() => setArea(active ? '' : a.value)}>
-                    <Ionicons name={a.icon as any} size={20} color={active ? colors.bg : colors.gold} />
+                    <Ionicons name={(active ? a.on : a.off) as any} size={20} color={active ? colors.bg : colors.gold} />
                     <Text style={[styles.tileTxt, active && { color: colors.bg }]} numberOfLines={1}>{a.label}</Text>
                   </Pressable>
                 );
@@ -339,24 +347,24 @@ const styles = StyleSheet.create({
   proofDot: { width: 26, height: 26, borderRadius: 13, backgroundColor: colors.gold, alignItems: 'center', justifyContent: 'center', marginLeft: -8, borderWidth: 1.5, borderColor: '#140f06' },
 
   // Form
-  formCard: { backgroundColor: colors.surface, borderRadius: radius.lg, padding: spacing.lg, borderWidth: 1, borderColor: colors.border, gap: spacing.md, ...shadow.float },
+  formCard: { backgroundColor: PREMIUM.card, borderRadius: radius.lg, padding: spacing.lg, borderWidth: 1, borderColor: PREMIUM.hair, gap: spacing.md, ...shadow.float },
   formHeadRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
   formHeadTxt: { fontFamily: fonts.bodySemi, color: colors.text, fontSize: 15 },
 
   tiles: { flexDirection: 'row', gap: 6 },
-  tile: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 5, paddingVertical: spacing.md, borderRadius: radius.md, backgroundColor: colors.surfaceAlt, borderWidth: 1, borderColor: colors.border },
+  tile: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: 5, paddingVertical: spacing.md, borderRadius: radius.md, backgroundColor: PREMIUM.tile, borderWidth: 1, borderColor: PREMIUM.hair },
   tileActive: { backgroundColor: colors.gold, borderColor: colors.gold },
   tileTxt: { fontFamily: fonts.bodyMedium, color: colors.textMuted, fontSize: 10.5 },
 
-  input: { backgroundColor: colors.surfaceAlt, borderRadius: radius.md, paddingHorizontal: spacing.md, paddingVertical: spacing.md, color: colors.text, fontFamily: fonts.body, fontSize: 15, borderWidth: 1, borderColor: colors.border },
+  input: { backgroundColor: PREMIUM.tile, borderRadius: radius.md, paddingHorizontal: spacing.md, paddingVertical: spacing.md, color: colors.text, fontFamily: fonts.body, fontSize: 15, borderWidth: 1, borderColor: PREMIUM.hairSoft },
 
   label: { fontFamily: fonts.bodyMedium, color: colors.textMuted, fontSize: 13, marginTop: 2 },
-  textareaWrap: { backgroundColor: colors.surfaceAlt, borderRadius: radius.md, borderWidth: 1, borderColor: colors.border, padding: spacing.md },
+  textareaWrap: { backgroundColor: PREMIUM.tile, borderRadius: radius.md, borderWidth: 1, borderColor: PREMIUM.hairSoft, padding: spacing.md },
   textarea: { minHeight: 96, color: colors.text, fontFamily: fonts.body, fontSize: 15, textAlignVertical: 'top' },
   counter: { fontFamily: fonts.body, color: colors.textFaint, fontSize: 11, alignSelf: 'flex-end', marginTop: 4 },
 
   toggleRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
-  waIcon: { width: 38, height: 38, borderRadius: 19, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.surfaceAlt, borderWidth: 1, borderColor: colors.border },
+  waIcon: { width: 38, height: 38, borderRadius: 19, alignItems: 'center', justifyContent: 'center', backgroundColor: PREMIUM.tile, borderWidth: 1, borderColor: PREMIUM.hairSoft },
   toggleTitle: { fontFamily: fonts.bodySemi, color: colors.text, fontSize: 14 },
   toggleSub: { fontFamily: fonts.body, color: colors.textMuted, fontSize: 11.5, lineHeight: 15, marginTop: 1 },
 
@@ -377,7 +385,7 @@ const styles = StyleSheet.create({
   empty: { fontFamily: fonts.body, color: colors.textFaint, fontSize: 14, textAlign: 'center', marginTop: spacing.lg },
 
   // Mural
-  muralCard: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, backgroundColor: colors.surface, borderRadius: radius.md, padding: spacing.md, borderWidth: 1, borderColor: colors.border, marginBottom: spacing.md },
+  muralCard: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, backgroundColor: PREMIUM.card, borderRadius: radius.md, padding: spacing.md, borderWidth: 1, borderColor: PREMIUM.hairSoft, marginBottom: spacing.md },
   avatar: { width: 44, height: 44, borderRadius: 22, backgroundColor: colors.gold, alignItems: 'center', justifyContent: 'center' },
   avatarTxt: { fontFamily: fonts.bodyBold, color: colors.bg, fontSize: 18 },
   muralNome: { fontFamily: fonts.bodySemi, color: colors.text, fontSize: 15 },
@@ -390,15 +398,15 @@ const styles = StyleSheet.create({
   orarText: { fontFamily: fonts.bodyBold, color: colors.green, fontSize: 10.5 },
 
   // Meus pedidos
-  meuCard: { backgroundColor: colors.surface, borderRadius: radius.md, padding: spacing.lg, borderWidth: 1, borderColor: colors.gold, marginBottom: spacing.md, ...shadow.float },
+  meuCard: { backgroundColor: PREMIUM.card, borderRadius: radius.md, padding: spacing.lg, borderWidth: 1, borderColor: colors.gold, marginBottom: spacing.md, ...shadow.float },
   meuTop: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: spacing.sm },
-  statusPill: { flexDirection: 'row', alignItems: 'center', gap: 5, backgroundColor: colors.surfaceAlt, borderRadius: radius.pill, paddingVertical: 4, paddingHorizontal: spacing.sm },
+  statusPill: { flexDirection: 'row', alignItems: 'center', gap: 5, backgroundColor: PREMIUM.tile, borderRadius: radius.pill, paddingVertical: 4, paddingHorizontal: spacing.sm },
   statusOk: { borderWidth: 1, borderColor: colors.green },
   statusText: { fontFamily: fonts.bodySemi, color: colors.gold, fontSize: 12 },
-  muralArea: { fontFamily: fonts.bodyMedium, color: colors.gold, fontSize: 12, backgroundColor: colors.surfaceAlt, paddingHorizontal: spacing.sm, paddingVertical: 3, borderRadius: radius.sm },
+  muralArea: { fontFamily: fonts.bodyMedium, color: colors.gold, fontSize: 12, backgroundColor: PREMIUM.tile, paddingHorizontal: spacing.sm, paddingVertical: 3, borderRadius: radius.sm },
 
   // Versículo
-  verseBox: { backgroundColor: colors.surface, borderRadius: radius.lg, padding: spacing.lg, marginTop: spacing.xl, borderWidth: 1, borderColor: colors.gold, alignItems: 'center' },
+  verseBox: { backgroundColor: PREMIUM.card, borderRadius: radius.lg, padding: spacing.lg, marginTop: spacing.xl, borderWidth: 1, borderColor: PREMIUM.hair, alignItems: 'center' },
   verseQuote: { fontFamily: fonts.display, color: colors.gold, fontSize: 28, lineHeight: 28, marginBottom: -6 },
   verseText: { fontFamily: fonts.body, color: colors.text, fontSize: 16, fontStyle: 'italic', textAlign: 'center' },
   verseRef: { fontFamily: fonts.bodySemi, color: colors.goldSoft, fontSize: 12, letterSpacing: 1, marginTop: spacing.sm },
