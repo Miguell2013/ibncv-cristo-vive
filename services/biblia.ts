@@ -90,6 +90,25 @@ export async function fetchPlanos(): Promise<PlanoLeitura[]> {
   return (data as PlanoLeitura[]) ?? [];
 }
 
+// ——— Dicionário bíblico ———
+export type TermoDic = {
+  term: string;
+  definition: string;
+  original: string | null;
+  transliteration: string | null;
+  strong: string | null;
+  reference: string | null;
+};
+
+export async function fetchDicionario(): Promise<TermoDic[]> {
+  const { data } = await biblia
+    .from('bible_dictionary')
+    .select('term,definition,original,transliteration,strong,reference')
+    .eq('language', LANG).eq('is_published', true)
+    .order('term');
+  return (data as TermoDic[]) ?? [];
+}
+
 export async function fetchDiasPlano(planId: string): Promise<DiaPlano[]> {
   const { data } = await biblia
     .from('reading_plan_days')

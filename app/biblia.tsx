@@ -173,6 +173,16 @@ export default function Biblia() {
           <Ionicons name="chevron-forward" size={20} color={colors.gold} />
         </Pressable>
 
+        {/* atalho dicionário */}
+        <Pressable style={styles.planoCard} onPress={() => router.push('/dicionario' as any)}>
+          <View style={styles.planoIcon}><Ionicons name="search" size={20} color={colors.gold} /></View>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.planoTitulo}>Dicionário Bíblico</Text>
+            <Text style={styles.planoSub}>Significado de termos com original e Strong</Text>
+          </View>
+          <Ionicons name="chevron-forward" size={20} color={colors.gold} />
+        </Pressable>
+
         {/* AT / NT */}
         <View style={styles.testRow}>
           <Pressable style={[styles.testBtn, test === 'AT' && styles.testOn]} onPress={() => setTest('AT')}>
