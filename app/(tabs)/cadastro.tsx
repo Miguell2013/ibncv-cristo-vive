@@ -17,6 +17,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { colors, fonts, radius, spacing, shadow, img } from '../../constants/theme';
 import { supabase } from '../../services/supabase';
+import { HeaderRefresh } from '../../components/HeaderRefresh';
 
 type Tipo = 'visitante' | 'novo_convertido' | 'membro';
 
@@ -153,6 +154,7 @@ export default function Cadastro() {
       <ScrollView style={styles.root} contentContainerStyle={{ paddingBottom: spacing.xxl }} showsVerticalScrollIndicator={false}>
         <ImageBackground source={{ uri: img.acolhida }} style={[styles.hero, { paddingTop: insets.top + spacing.lg }]} imageStyle={styles.heroImg}>
           <View style={styles.heroOverlay} />
+          <HeaderRefresh top={insets.top + 4} />
           <View style={[styles.heroContent, { maxWidth: maxW }]}>
             <Text style={styles.kicker}>ACOLHIMENTO</Text>
             <Text style={styles.title}>Seja bem-vindo</Text>
@@ -190,6 +192,7 @@ export default function Cadastro() {
         keyboardShouldPersistTaps="handled"
       >
         <View style={[styles.body, { maxWidth: maxW }]}>
+          <HeaderRefresh top={4} align="right" />
           <Pressable style={styles.voltar} onPress={() => setEtapa('escolha')} hitSlop={10}>
             <Ionicons name="chevron-back" size={24} color={colors.text} />
             <Text style={styles.voltarTxt}>Voltar</Text>

@@ -15,6 +15,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import { colors, fonts, radius, spacing, shadow, img } from '../../constants/theme';
 import { supabase, Evento } from '../../services/supabase';
+import { HeaderRefresh } from '../../components/HeaderRefresh';
 
 export default function Agenda() {
   const insets = useSafeAreaInsets();
@@ -50,6 +51,7 @@ export default function Agenda() {
       }
     >
       <View style={[styles.body, { maxWidth: maxW }]}>
+        <HeaderRefresh top={4} />
         <Image source={{ uri: img.logo }} style={styles.logo} resizeMode="contain" />
         <Text style={styles.title}>AGENDA</Text>
         <View style={styles.goldLine} />

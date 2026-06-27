@@ -12,6 +12,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { colors, fonts, radius, spacing, shadow, img } from '../../constants/theme';
 import { useIdentity } from '../../contexts/identity';
+import { HeaderRefresh } from '../../components/HeaderRefresh';
 
 const ITENS: { icon: string; label: string; desc: string; rota?: string }[] = [
   { icon: 'book', label: 'Quem somos', desc: 'Nossa história, visão e valores' },
@@ -35,6 +36,7 @@ export default function Mais() {
       showsVerticalScrollIndicator={false}
     >
       <View style={[styles.body, { maxWidth: maxW }]}>
+        <HeaderRefresh top={4} align="right" />
         <View style={styles.brandRow}>
           <Image source={{ uri: img.logo }} style={styles.logo} resizeMode="contain" />
           <View>

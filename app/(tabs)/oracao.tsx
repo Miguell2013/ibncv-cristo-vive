@@ -19,6 +19,7 @@ import { useRouter } from 'expo-router';
 import { colors, fonts, radius, spacing, shadow, img } from '../../constants/theme';
 import { supabase, PedidoOracao } from '../../services/supabase';
 import { useIdentity } from '../../contexts/identity';
+import { HeaderRefresh } from '../../components/HeaderRefresh';
 
 const AREAS: { label: string; value: string; on: string; off: string }[] = [
   { label: 'Família', value: 'familia', on: 'people', off: 'people-outline' },
@@ -148,6 +149,7 @@ export default function Oracao() {
         keyboardShouldPersistTaps="handled"
       >
         <View style={[styles.body, { maxWidth: maxW }]}>
+          <HeaderRefresh top={4} />
           {/* CABEÇALHO */}
           <View style={styles.headerWrap}>
             <Image source={{ uri: img.logo }} style={styles.logo} resizeMode="contain" />
