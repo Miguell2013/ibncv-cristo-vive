@@ -64,6 +64,7 @@ export default function Oracao() {
   const [orei, setOrei] = useState<Record<string, boolean>>({});
   const [meus, setMeus] = useState<PedidoOracao[]>([]);
   const [totalOrando, setTotalOrando] = useState(0);
+  const [verTodos, setVerTodos] = useState(false);
 
   const carregarMeus = useCallback(async () => {
     if (!identidade?.pessoaId) { setMeus([]); return; }
@@ -281,14 +282,18 @@ export default function Oracao() {
           {/* MURAL */}
           <View style={styles.sectionHead}>
             <Text style={styles.sectionTitle}>Mural de Oração</Text>
-            <Text style={styles.verTodos}>Ver todos</Text>
+            {mural.length > 4 && (
+              <Pressable hitSlop={8} onPress={() => setVerTodos((v) => !v)}>
+                <Text style={styles.verTodos}>{verTodos ? 'Ver menos' : 'Ver todos'}</Text>
+              </Pressable>
+            )}
           </View>
           <Text style={styles.sectionSub}>Ore pelos pedidos da nossa comunidade.</Text>
 
           {mural.length === 0 ? (
             <Text style={styles.empty}>Seja o primeiro a compartilhar um pedido. 🙏</Text>
           ) : (
-            mural.map((p) => (
+            (verTodos ? mural : mural.slice(0, 4)).map((p) => (
               <View key={p.id} style={styles.muralCard}>
                 <View style={styles.avatar}><Text style={styles.avatarTxt}>{inicialDe(p.autor_nome)}</Text></View>
                 <View style={{ flex: 1 }}>
