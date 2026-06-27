@@ -15,7 +15,7 @@ import { useIdentity } from '../../contexts/identity';
 import { HeaderRefresh } from '../../components/HeaderRefresh';
 
 const ITENS: { icon: string; label: string; desc: string; rota?: string }[] = [
-  { icon: 'book', label: 'Quem somos', desc: 'Nossa história, visão e valores' },
+  { icon: 'flame', label: 'Nossa Missão', desc: 'Família, acolhimento e o Evangelho de Cristo', rota: '/missao' },
   { icon: 'people', label: 'Ministérios', desc: 'Encontre seu lugar pra servir', rota: '/ministerios' },
   { icon: 'book', label: 'Bíblia', desc: 'Almeida com áudio + plano de leitura', rota: '/biblia' },
   { icon: 'library', label: 'Estudos', desc: 'Panorama de Romanos e mais', rota: '/estudos' },

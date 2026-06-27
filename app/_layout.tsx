@@ -153,6 +153,7 @@ export default function RootLayout() {
             <Stack.Screen name="biblia" />
             <Stack.Screen name="plano" />
             <Stack.Screen name="dicionario" />
+            <Stack.Screen name="missao" />
           </Stack>
           <InstallPrompt />
           <PushPrompt />
