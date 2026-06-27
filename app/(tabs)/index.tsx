@@ -167,6 +167,16 @@ export default function Home() {
           ))}
         </View>
 
+        {/* ATALHO BÍBLIA */}
+        <Pressable style={({ pressed }) => [styles.bibliaCard, pressed && styles.pressed]} onPress={() => router.push('/biblia' as any)}>
+          <View style={styles.bibliaIcon}><Ionicons name="book" size={22} color={colors.gold} /></View>
+          <View style={{ flex: 1 }}>
+            <Text style={styles.bibliaTitulo}>Bíblia Sagrada</Text>
+            <Text style={styles.bibliaSub}>Leia e ouça · plano de leitura anual</Text>
+          </View>
+          <Ionicons name="chevron-forward" size={20} color={colors.gold} />
+        </Pressable>
+
         {/* PALAVRA PASTORAL DO DIA */}
         {palavra && (
           <ImageBackground
@@ -281,6 +291,11 @@ const styles = StyleSheet.create({
     borderRadius: radius.pill, paddingVertical: spacing.sm, paddingHorizontal: spacing.lg, marginTop: spacing.sm,
   },
   heroBtnText: { fontFamily: fonts.bodyBold, color: colors.bg, fontSize: 13, letterSpacing: 1 },
+
+  bibliaCard: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, backgroundColor: colors.surface, borderRadius: radius.md, padding: spacing.md, borderWidth: 1, borderColor: colors.gold, marginTop: spacing.md, ...shadow.glow },
+  bibliaIcon: { width: 44, height: 44, borderRadius: 22, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.surfaceAlt, borderWidth: 1.5, borderColor: colors.gold },
+  bibliaTitulo: { fontFamily: fonts.bodySemi, color: colors.text, fontSize: 15 },
+  bibliaSub: { fontFamily: fonts.body, color: colors.textMuted, fontSize: 12, marginTop: 2 },
 
   atalhos: { flexDirection: 'row', gap: spacing.sm, marginTop: spacing.lg },
   atalho: {

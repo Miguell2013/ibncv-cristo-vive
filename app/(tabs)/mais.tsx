@@ -17,6 +17,7 @@ import { HeaderRefresh } from '../../components/HeaderRefresh';
 const ITENS: { icon: string; label: string; desc: string; rota?: string }[] = [
   { icon: 'book', label: 'Quem somos', desc: 'Nossa história, visão e valores' },
   { icon: 'people', label: 'Ministérios', desc: 'Encontre seu lugar pra servir', rota: '/ministerios' },
+  { icon: 'book', label: 'Bíblia', desc: 'Almeida com áudio + plano de leitura', rota: '/biblia' },
   { icon: 'library', label: 'Estudos', desc: 'Panorama de Romanos e mais', rota: '/estudos' },
   { icon: 'cash', label: 'Contribuição', desc: 'Dízimos e ofertas com fé', rota: '/contribuicao' },
   { icon: 'location', label: 'Onde estamos', desc: 'Endereço e como chegar' },

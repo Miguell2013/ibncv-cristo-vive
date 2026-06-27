@@ -150,6 +150,8 @@ export default function RootLayout() {
             <Stack.Screen name="avisos" />
             <Stack.Screen name="aovivo" />
             <Stack.Screen name="estudos" />
+            <Stack.Screen name="biblia" />
+            <Stack.Screen name="plano" />
           </Stack>
           <InstallPrompt />
           <PushPrompt />
