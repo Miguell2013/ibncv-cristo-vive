@@ -320,7 +320,7 @@ const styles = StyleSheet.create({
 
   // Cabeçalho
   headerWrap: { alignItems: 'center', marginBottom: spacing.lg },
-  logo: { width: 150, height: 75, marginTop: -10, marginBottom: -10 },
+  logo: { width: 270, height: 135, marginTop: -22, marginBottom: -34 },
   title: { fontFamily: fonts.display, color: colors.gold, fontSize: 30, letterSpacing: 1, textAlign: 'center' },
   subtitle: { fontFamily: fonts.body, color: colors.textMuted, fontSize: 14, lineHeight: 20, textAlign: 'center', marginTop: spacing.sm },
 
