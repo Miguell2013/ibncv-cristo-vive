@@ -40,7 +40,7 @@ const LIMITE = 500;
 
 function inicialDe(nome?: string) {
   const n = (nome || '').trim();
-  return n ? n.charAt(0).toUpperCase() : '🙏';
+  return n ? n.charAt(0).toUpperCase() : 'A';
 }
 
 export default function Oracao() {
@@ -240,7 +240,7 @@ export default function Oracao() {
             </View>
 
             {erro && <Text style={styles.erro}>{erro}</Text>}
-            {ok && <Text style={styles.ok}>Recebemos seu pedido. Estamos orando com você. 🤍</Text>}
+            {ok && <Text style={styles.ok}>Recebemos seu pedido. Estamos orando com você.</Text>}
 
             <Pressable
               style={({ pressed }) => [styles.btn, pressed && styles.pressed, loading && { opacity: 0.7 }]}
@@ -291,7 +291,7 @@ export default function Oracao() {
           <Text style={styles.sectionSub}>Ore pelos pedidos da nossa comunidade.</Text>
 
           {mural.length === 0 ? (
-            <Text style={styles.empty}>Seja o primeiro a compartilhar um pedido. 🙏</Text>
+            <Text style={styles.empty}>Seja o primeiro a compartilhar um pedido.</Text>
           ) : (
             (verTodos ? mural : mural.slice(0, 4)).map((p) => (
               <View key={p.id} style={styles.muralCard}>
@@ -317,9 +317,9 @@ export default function Oracao() {
 
           {/* VERSÍCULO */}
           <View style={styles.verseBox}>
-            <Text style={styles.verseQuote}>“</Text>
-            <Text style={styles.verseText}>Orai uns pelos outros.</Text>
-            <Text style={styles.verseRef}>— TIAGO 5:16</Text>
+            <Text style={styles.verseText}>“Orai uns pelos outros.”</Text>
+            <View style={styles.verseLine} />
+            <Text style={styles.verseRef}>TIAGO 5:16</Text>
           </View>
         </View>
       </ScrollView>
@@ -411,10 +411,10 @@ const styles = StyleSheet.create({
   muralArea: { fontFamily: fonts.bodyMedium, color: colors.gold, fontSize: 12, backgroundColor: PREMIUM.tile, paddingHorizontal: spacing.sm, paddingVertical: 3, borderRadius: radius.sm },
 
   // Versículo
-  verseBox: { backgroundColor: PREMIUM.card, borderRadius: radius.lg, padding: spacing.lg, marginTop: spacing.xl, borderWidth: 1, borderColor: PREMIUM.hair, alignItems: 'center' },
-  verseQuote: { fontFamily: fonts.display, color: colors.gold, fontSize: 28, lineHeight: 28, marginBottom: -6 },
-  verseText: { fontFamily: fonts.body, color: colors.text, fontSize: 16, fontStyle: 'italic', textAlign: 'center' },
-  verseRef: { fontFamily: fonts.bodySemi, color: colors.goldSoft, fontSize: 12, letterSpacing: 1, marginTop: spacing.sm },
+  verseBox: { backgroundColor: PREMIUM.card, borderRadius: radius.lg, paddingVertical: spacing.lg, paddingHorizontal: spacing.lg, marginTop: spacing.xl, borderWidth: 1, borderColor: PREMIUM.hair, alignItems: 'center' },
+  verseText: { fontFamily: fonts.display, color: colors.text, fontSize: 21, lineHeight: 30, textAlign: 'center', letterSpacing: 0.5 },
+  verseLine: { width: 44, height: 1.5, backgroundColor: colors.gold, borderRadius: 1, marginTop: spacing.md, marginBottom: spacing.sm },
+  verseRef: { fontFamily: fonts.bodySemi, color: colors.goldSoft, fontSize: 12, letterSpacing: 2 },
 
   pressed: { opacity: 0.85, transform: [{ scale: 0.99 }] },
 });
