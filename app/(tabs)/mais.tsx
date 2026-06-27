@@ -40,10 +40,8 @@ export default function Mais() {
         <HeaderRefresh top={14} align="right" />
         <View style={styles.brandRow}>
           <Image source={{ uri: img.logo }} style={styles.logo} resizeMode="contain" />
-          <View>
-            <Text style={styles.brand}>CRISTO VIVE</Text>
-            <Text style={styles.brandSub}>Igreja Batista Nacional</Text>
-          </View>
+          <Text style={styles.brand}>CRISTO VIVE</Text>
+          <Text style={styles.brandSub}>Igreja Batista Nacional</Text>
         </View>
 
         {identificado ? (
@@ -137,10 +135,10 @@ const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.bg },
   body: { width: '100%', paddingHorizontal: spacing.md },
 
-  brandRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md, marginBottom: spacing.xl },
-  logo: { width: 60, height: 60 },
-  brand: { fontFamily: fonts.display, color: colors.text, fontSize: 22, letterSpacing: 2 },
-  brandSub: { fontFamily: fonts.body, color: colors.textMuted, fontSize: 13 },
+  brandRow: { alignItems: 'center', marginBottom: spacing.lg },
+  logo: { width: 270, height: 135, marginTop: -22, marginBottom: -34 },
+  brand: { fontFamily: fonts.display, color: colors.text, fontSize: 22, letterSpacing: 2, textAlign: 'center' },
+  brandSub: { fontFamily: fonts.body, color: colors.textMuted, fontSize: 13, textAlign: 'center' },
 
   item: {
     flexDirection: 'row', alignItems: 'center', gap: spacing.md, backgroundColor: colors.surface,

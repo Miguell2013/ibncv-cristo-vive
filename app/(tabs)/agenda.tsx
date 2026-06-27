@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.bg },
   body: { width: '100%', paddingHorizontal: spacing.md, alignItems: 'center' },
 
-  logo: { width: 96, height: 54, marginBottom: spacing.sm },
+  logo: { width: 270, height: 135, marginTop: -22, marginBottom: -34 },
   title: { fontFamily: fonts.display, color: colors.gold, fontSize: 34, letterSpacing: 4 },
   goldLine: { width: 56, height: 2, backgroundColor: colors.gold, marginVertical: spacing.sm, borderRadius: 2 },
   subtitle: { fontFamily: fonts.body, color: colors.textMuted, fontSize: 14, marginBottom: spacing.lg, textAlign: 'center' },
